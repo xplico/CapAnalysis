@@ -1,0 +1,11 @@
+--
+-- Tabella degli IP
+--
+CREATE TABLE dID_ips (
+  id INTEGER NOT NULL PRIMARY KEY,
+  dataset_id INTEGER NOT NULL REFERENCES datasets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ip VARCHAR( 64 ),
+  name VARCHAR( 128 )
+);
+
+ALTER TABLE dID_ips OWNER TO capana;

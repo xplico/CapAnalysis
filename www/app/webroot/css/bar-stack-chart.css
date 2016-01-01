@@ -1,0 +1,314 @@
+/*!
+   CapAnalysis
+   
+   Copyright 2012 Gianluca Costa (http://www.capanalysis.net) 
+   All rights reserved.
+*/
+svg {
+	font: 10px sans-serif;
+	/*shape-rendering: crispEdges;*/
+}
+svg text {
+	color: black;
+}
+svg text.bold {
+	font-weight: bold;
+}
+.axis {
+	shape-rendering: crispEdges;
+}
+.axis path {
+	fill: none;
+}
+.y.axis path,
+.x.axis path {
+	stroke: black;
+}
+.bstk line.tick {
+	stroke: #fff;
+	stroke-opacity: .6;
+}
+.x.axis.bstk path {
+	stroke: none;
+}
+
+/* matrix overview */
+.matrix .background {
+    fill: #EEEEEE;
+}
+.matrix line {
+	stroke: #FFFFFF;
+	shape-rendering: crispEdges;
+}
+text.active {
+	fill: red;
+}
+.cinfo {
+	overflow: hidden;
+}
+.cdetails {
+	background-color: #ffffff;
+	border: 2px solid #444444;
+    -webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	padding: 10px 5px 7px 10px;
+	overflow: hidden;
+	color: #444444;
+}
+.cdetails h3 {
+	font-size: 1em;
+}
+
+#statistics .stat_size {
+	width: 465px;
+	height: 173px;
+	margin: 7px;
+}
+
+/* pie overview */
+#overview {
+	padding-top: 7px;
+}
+
+#opie path {
+    stroke: white;
+    stroke-width: 2px;
+    fill: #666666;
+}
+#opie path.sent {
+	fill: #9E0142;
+}
+
+/* hour data */
+#dat_min .ra {
+	fill: #9E0142;
+}
+#dat_min .rb {
+    fill: #666666;
+}
+#ip_dat_min .ra {
+	fill: #339933;
+}
+#ip_dat_min .rb {
+    fill: #5E4FA2;
+}
+svg line {
+    stroke: #AAAAAA;
+}
+.assim_arc {
+    stroke: black;
+    stroke-width: 1px;
+}
+
+/* sankey */
+.sankey .node rect {
+	cursor: move;
+	fill-opacity: .9;
+	shape-rendering: crispEdges;
+}
+.sankey .node text {
+	pointer-events: none;
+	text-shadow: 0 1px 0 #fff;
+}
+.sankey .link {
+	fill: none;
+	stroke: #000;
+	stroke-opacity: .2;
+}
+.sankey .sent {
+	stroke: #9E0142;
+	stroke-opacity: .2;
+}
+.sankey .received {
+	stroke: #339933;
+	stroke-opacity: .2;
+}
+.sankey .link:hover {
+	stroke-opacity: .5;
+}
+.sankey .sent:hover {
+	stroke: #9E0142;
+	stroke-opacity: .5;
+}
+.sankey .received:hover {
+	stroke: #339933;
+	stroke-opacity: .5;
+}
+
+/* geomap */
+#geomap path.border {
+	stroke: white;
+	stroke-opacity: 0.6;
+}
+#geomap path.border:hover {
+	stroke-width: 2px;
+	stroke-opacity: 1;
+}
+#geomap .info {
+	padding: 6px 8px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(0,0,0,0.4);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+#geomap .info h4 {
+	margin: 0 0 5px;
+	color: #777;
+}
+#geomap .info {
+	color: #fff;
+}
+#geomap .legend {
+	text-align: left;
+	line-height: 18px;
+}
+#geomap .legend i {
+	width: 18px;
+	height: 18px;
+	float: left;
+	margin-right: 8px;
+	opacity: 0.7;
+}
+.opie path {
+    stroke: white;
+    stroke-width: 2px;
+    fill: #339933;
+}
+.opie path.sent {
+	fill: #9E0142;
+}
+
+/* global */
+.chart .smlstr {
+    stroke-width: 0.1px;
+}
+.chart .ra {
+	fill: #17BECF;
+	stroke: white;
+}
+.chart .rb {
+	fill: #CC3333;
+	stroke: white;
+}
+.chart .rc {
+	fill: #00C333;
+	stroke: white;
+}
+.chart .rd {
+	fill: #5C0000;
+	stroke: white;
+}
+/* tree */
+.gtree .node circle {
+	cursor: pointer;
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 1.5px;
+}
+
+.gtree .node text {
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.gtree path.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
+}
+.gtree rect.info {
+	fill: #EEEEEE;
+	stroke: #8E8E8E;
+	stroke-width: 1.5px;
+}
+.gtree rect.flow {
+	fill: #676767;
+	stroke: #000;
+	stroke-width: 1px;
+}
+.gtree rect.data {
+	fill: #FFA500;
+	stroke: #000;
+	stroke-width: 1px;
+}
+.gtree rect.sent {
+	fill: #F93838;
+	stroke: #000;
+	stroke-width: 1px;
+}
+.gtree rect.rec {
+	fill: #03C203;
+	stroke: #000;
+	stroke-width: 1px;
+}
+rect.invisible {
+	fill: #eeeeee;
+	stroke-width: 0px;
+	fill-opacity: 0;
+}
+#timeline > div,
+#timeline_emb > div {
+	position: relative;
+}
+.abslegend {
+    position: absolute;
+    right: 150px;
+    font-size: 11px;
+    top: -9px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #333333;
+}
+.abslegend .ltext {
+	border: 1px solid #444444;
+	background: white;
+	background: rgba(0,0,0,0.4);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    -webkit-border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px;
+    padding: 3px 15px 0px 15px;
+}
+.abslegend .lvalue {
+	border: 1px solid #444444;
+	background: white;
+	background: none repeat scroll 0 0 #DF0000;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    -webkit-border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 0px 0px;
+	border-radius: 10px 10px 0px 0px;
+    padding: 3px 15px 0px 15px;
+}
+
+/* grafico protocolli */
+.pgraph .label {
+	fill: #777;
+	cursor: pointer;
+}
+.pgraph .r.label {
+	font: 500 49px "Helvetica Neue";
+	fill: #ddd;
+}
+.pgraph .dot {
+	stroke: #222;
+	opacity: 0.6;
+	stroke-width: 2px;
+}
+.pgraph text {
+	font: 10px sans-serif;
+}
+.pgraph .info text {
+	fill: #F8F8F8;
+    font: bold 13px Helvetica;
+}
+
+
+/* esperiemnti */
+.pointer
+{
+    stroke: #555;
+    shape-rendering: crispEdges;
+    fill: #f05050;
+}

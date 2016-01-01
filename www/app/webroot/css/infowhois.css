@@ -1,0 +1,100 @@
+/*
+   CapAnalysis
+   
+   Copyright © 2012 Gianluca Costa (http://www.capanlysis.net) 
+   All rights reserved.
+*/
+/* flew info */
+div.flowinfo {
+	font-size: 90%;
+	padding: 10px;
+}
+div.flowinfo h2 {
+	border-bottom: 1px solid;
+	font-size: 1.8em;
+	padding-bottom: 3px;
+	margin: 5px 0 10px 0;
+}
+div.flowinfo div {
+	margin: 5px 0 2px 5px;
+}
+div.flowinfo div h3 {
+    text-shadow: 0 0 1px #BFFFFF;
+    text-transform: uppercase;
+    font-size: 1.4em;
+}
+div.flowinfo p {
+	font-size: 1.2em;
+	line-height: 1.3em;
+    padding: 3px 0 3px 5px;
+}
+div.flowinfo span {
+	text-transform: uppercase;
+}
+div.flowinfo span.data {
+	color: #000093;
+}
+div.flowinfo span.download {
+    position: relative;
+	bottom: 10px;
+    left: 4px;
+}
+/* whois */
+div.whois {
+	line-height: 1.1em;
+}
+div.whois span.data {
+	color: #000093;
+}
+div.whois p.line {
+	line-height: 1.2em;
+}
+/* ipdata */
+.ipdata p {
+	font-size: 13px;
+	padding: 5px;
+}
+.ipdata span.data {
+	color: #000093;
+}
+.donut-chart {
+	background-color: #ffffff;
+	font: 10px sans-serif;
+	text-shadow: none;
+}
+.donut-chart .total,
+.chours .total {
+	font-size: 16px;
+	font-weight: bold;
+}
+.donut-chart .units,
+.chours .units{
+	fill: gray;
+	font-size: 12px;
+}
+.donut-chart .label,
+.chours .label{
+	fill: #CCC;
+	font-size: 12px;
+	font-weight: bold;
+}
+.donut-chart .value{
+	font-size: 12px;
+	font-weight: bold;
+}
+.donut_cng {
+	color: #d50454;
+}
+.donut_cng:hover {
+	background-color: #E5E5E5;
+}
+svg.chours line {
+    stroke: #C9C9C9;
+}
+svg.chours circle {
+	stroke: #EAEAEA;
+	stroke-width: 1px;
+}
+svg.chours g.ax{
+	font: bold 7px sans-serif;
+}

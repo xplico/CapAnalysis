@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=capanalysis restart
+GenericName=CapAnalysis Service
+Comment=service capanalysis restart
+TryExec=/etc/init.d/capanalysis
+Exec=sh -c "sudo service capanalysis restart; bash"
+Icon=utilities-terminal
+Terminal=true
+Categories=System;Monitor;

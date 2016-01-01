@@ -1,0 +1,9 @@
+Steps
+-----
+Launch the command:
+    sudo -u postgres psql -f create_db.sql
+From file php.ini (/etc/php5/apache2/php.ini) change the line
+	memory_limit = 128M
+to
+	memory_limit = 300M
+

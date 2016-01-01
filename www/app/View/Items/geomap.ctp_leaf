@@ -1,0 +1,212 @@
+<!--
+   CapAnalysis
+
+   Copyright 2012 Gianluca Costa (http://www.capanalysis.net) 
+   All rights reserved.
+-->
+<div style="position: absolute; right: 0;">
+	<div id="reload_gm" class="treload"><a href="#"><?php echo $this->Html->image('reload.png', array('alt' => '')); ?></a></div>
+</div>
+<div id="geomap">
+	<p id="gmap" style="width: 1000px; height: 500px; padding: 5px">
+	<div class="clear">&nbsp;</div>
+	<script>
+
+	var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://cloudmade.com">CloudMade</a>',
+		tilesUrl = 'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+		map = new L.Map("gmap")
+			.setView(new L.LatLng(20, 12), 2)
+			.addLayer(new L.TileLayer('http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png',
+				{minZoom: 2,
+				 maxZoom: 11,
+				 attribution: attribution,
+				 key: 'BC9A493B41014CAABB98F0471D759707',
+				 styleId: 22677 
+				 }));
+	
+	var countries = JSON.parse('<?php echo $countries; ?>'),
+		countries_id = JSON.parse('<?php echo $countries_id; ?>'),
+		show = 'tot',
+		//colors =  d3.interpolateRgb("#FFEDA0", "#800026"),
+		colors =  d3.interpolateRgb("#FFFF00", "#CC0066"),
+		clr_map = d3.scale.linear()
+			.range([0,1])
+			.domain([d3.min(countries, function(d) { return +d.data[show]; }), d3.max(countries, function(d) { return +d.data[show]; })]);
+		
+		
+		// control that shows state info on hover
+		var info = L.control({position: 'bottomright'});
+
+		info.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info');
+			this.update();
+			return this._div;
+		};
+
+		info.update = function (f) {
+			if (f) {
+				this._div.innerHTML = '<strong>' + f.properties.name + '</strong><br/><br/>'+
+				'<span>Flows: '+SizeBMG(+countries[countries_id[f.id]].data['flows'], 1000)+'</span><br/>'+
+				'Data: '+SizeBMG(+countries[countries_id[f.id]].data['tot'])+'<br/>'+
+				'Sent: '+SizeBMG(+countries[countries_id[f.id]].data['sent'])+'<br/>'+
+				'Received: '+SizeBMG(+countries[countries_id[f.id]].data['received'])+'<br/>';
+			}
+			else {
+				this._div.innerHTML = '';
+			}
+		};
+
+		info.addTo(map);
+
+
+		// get color depending on population density value
+		function getColor(d) {
+			return colors(clr_map(d));
+		}
+
+		function style(feature) {
+			if (typeof countries_id[feature.id] === 'undefined') {
+				return {
+					weight: 0,
+					opacity: 1,
+					color: 'white',
+					dashArray: '0',
+					fillOpacity: 0,
+					fillColor: "none"
+				};
+			}
+			return {
+				weight: 2,
+				opacity: .5,
+				color: 'black',
+				dashArray: '',
+				fillOpacity: 0.5,
+				fillColor: getColor(+countries[countries_id[feature.id]].data[show])
+			};
+		}
+
+		function highlightFeature(e) {
+			var layer = e.target;
+
+			layer.setStyle({
+				opacity: .8,
+				weight: 2.5,
+				fillOpacity: 0.7
+			});
+
+			if (!L.Browser.ie && !L.Browser.opera) {
+				layer.bringToFront();
+			}
+
+			info.update(layer.feature);
+		}
+
+		var geojson;
+
+		function resetHighlight(e) {
+			geojson.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				click: zoomToFeature
+			});
+		}
+
+		geojson = L.geoJson(world_countries, {
+			style: style,
+			onEachFeature: onEachFeature
+		}).addTo(map);
+
+		var legend = L.control({position: 'bottomleft'});
+
+		legend.onAdd = function (map) {
+			var div = L.DomUtil.create('div', 'info legend'),
+				grades = clr_map.ticks(4),
+				labels = [],
+				from, to;
+			labels.push('<span><b>Flows</b></span>');
+			labels.push('<i style="background:' + getColor(0) + '"></i> 0' + '&ndash;' + SizeBMG(grades[0]));
+			for (var i = 0; i < grades.length; i++) {
+				from = grades[i];
+				to = grades[i + 1];
+
+				labels.push(
+					'<i style="background:' + getColor(from) + '"></i> ' +
+					SizeBMG(from) + (SizeBMG(to) ? '&ndash;' + SizeBMG(to) : '+'));
+			}
+
+			div.innerHTML = labels.join('<br>');
+			return div;
+		};
+
+		legend.addTo(map);
+		
+
+			/*
+	var geojsonFeature = {
+    "type": "Feature",
+    "properties": {
+        "name": "Coors Field",
+        "amenity": "Baseball Stadium",
+        "popupContent": "This is where the Rockies play!"
+    },
+    "geometry": {
+        "type": "Point",
+        "coordinates": [45, 42]
+    }
+	};
+
+		function onEachFeature(feature, layer) {
+			var popupContent = "<p>I started out as a GeoJSON " +
+					feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+
+			layer.bindPopup(popupContent);
+		}
+	
+	L.geoJson(geojsonFeature, {
+
+			style: function (feature) {
+				return feature.properties && feature.properties.style;
+			},
+
+			onEachFeature: onEachFeature,
+
+			pointToLayer: function (feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: "#ff7800",
+					color: "#000",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		}).addTo(map);
+	*/
+	
+	// reload
+	$('#reload_gm').unbind('click');
+	$("#reload_gm").click(function() {
+		$.ajax({
+			url: "<?php echo $this->Html->url(array('controller' => 'items', 'action' => 'geomap')); ?>",
+			context: document.body
+		}).done(function(data) { 
+			$("#ui-tabs-4").html(data);
+		});
+	});
+	</script>
+</div>
+<div class="clear">&nbsp;</div>
+

@@ -1,0 +1,39 @@
+capanalysis (1.2.0) stable; urgency=low
+  * improved DPI
+  * PHP framework upgraded 
+  * bugs fixed
+  * Open source
+
+ -- Gianluca Costa (CapAnalysis) <support@capanalysis.net>  Sat, 26 Dec 2015 12:01:02 +0200
+
+capanalysis (1.1.3) stable; urgency=low
+  * improved DPI
+  * PHP framework upgraded 
+  * bugs fixed
+
+ -- Gianluca Costa (CapAnalysis) <support@capanalysis.net>  Sat, 29 Mar 2014 12:01:02 +0200
+
+capanalysis (1.1.2) stable; urgency=low
+  * improved DPI
+  * GeoMap: maps changed
+  * bugs fixed
+
+ -- Gianluca Costa (CapAnalysis) <g.costa@capanalysis.net>  Sat, 9 Mar 2014 12:01:02 +0200
+
+capanalysis (1.1.1) stable; urgency=low
+  * improved DPI
+  * bugs fixed
+
+ -- Gianluca Costa (CapAnalysis) <g.costa@capanalysis.net>  Sat, 1 Mar 2014 12:01:02 +0200
+ 
+capanalysis (1.1.0) stable; urgency=low
+  * xplico improved
+
+ -- Gianluca Costa (CapAnalysis) <g.costa@capanalysis.net>  Mon, 23 Dec 2013 14:22:00 +0200
+
+
+capanalysis (1.0.0) stable; urgency=low
+
+  * Ubuntu first release.
+
+ -- Gianluca Costa (CapAnalysis) <g.costa@capanalysis.net>  Sun, 02 Dec 2012 18:03:18 +0200

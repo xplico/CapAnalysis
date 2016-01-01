@@ -1,0 +1,281 @@
+/*
+   CapAnalysis
+   
+   Copyright © 2012 Gianluca Costa (http://www.capanlysis.net) 
+   All rights reserved.
+*/
+
+.tabs-nohdr {
+	margin-top: 10px;
+	background: none repeat scroll 0 0 transparent;
+	border-width: 0;
+	padding: 0;
+}
+.tabs-nohdr .ui-tabs-nav {
+	background: none repeat scroll 0 0 transparent;
+	border-radius: 0 0 0 0;
+	border-width: 0 0 0 0;
+	padding-left: 0;
+}
+.tabs-nohdr .ui-tabs-panel {
+	padding: 0px;
+}
+#tabs.ui-tabs  ul.ui-tabs-nav {
+	margin-left: 20px;
+	overflow: hidden;
+}
+#tabs.ui-tabs .ui-tabs-nav li {
+	font-size: 11px;
+	text-shadow: 1px 1px 0 #333333;
+}
+#tabs.ui-tabs .ui-tabs-nav li.ui-state-default {
+	margin-bottom: 0;
+	background: none repeat scroll 0 0 #B3B3B3;
+	border: 0px none;
+	margin-left: 2px;
+	overflow: hidden;
+	position: relative;
+	top: 3px;
+}
+#tabs.ui-tabs .ui-tabs-nav li.ui-state-default a {
+	color: #FBFFFF;
+}
+#tabs.ui-tabs .ui-tabs-nav li.ui-state-default:hover {
+	top: 0px;
+}
+#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+	background-color: #F3F3F3;
+	top: 0px;
+	padding-bottom: 0px;
+}
+#tabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+	color: #212121;
+	text-shadow: #fff 0 1px 0;
+}
+
+.ui-tabs .tabw {
+	border: 5px solid #F3F3F3;
+    -webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	overflow: hidden;
+	background: #F9F9F9;
+	background-repeat: repeat-x;
+	background-image: -moz-linear-gradient(top, #F9F9F9, #FDFDFD);
+	background-image: -ms-linear-gradient(top, #F9F9F9, #FDFDFD);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#F9F9F9), to(#FDFDFD));
+	background-image: -webkit-linear-gradient(top, #F9F9F9, #FDFDFD);
+	background-image: -o-linear-gradient(top, #F9F9F9, #FDFDFD);
+	background-image: linear-gradient(top, #F9F9F9, #FDFDFD);
+	color: #646167;
+	margin-bottom: 10px;
+	min-height: 250px;
+}
+.ui-tabs .tabw.btbar {
+	margin-bottom: 0px;
+}
+.ui-tabs .tabw.scrollx {
+	overflow-x: scroll;
+}
+.ui-tabs .tabw.scrolly {
+	overflow-y: scroll;
+}
+.ui-tabs .tabw.scrollxy {
+	overflow: scroll;
+	height: 350px; /* the same of tabw min */
+}
+.actions .ui-button-text {
+	padding: 0;
+	line-height: 15px;
+}
+
+/* slide bar */
+.ui-slider-horizontal {
+    height: 0.6em;
+}
+.ui-slider .ui-slider-handle {
+    height: 1em;
+    width: 1em;
+}
+
+/* animated progress bar */
+.ui-progressbar .ui-progressbar-value {
+	background-image: url(images/pbar-ani.gif);
+}
+.ui-progressbar {
+    height: 0.5em;
+    left: 25%;
+    position: absolute;
+    margin-top: 20px;
+    width: 50%;
+}
+
+/* input obfuscate by a button */
+.inbutton .ui-button-text {
+	font-size: 13px;
+}
+.inbutton input {
+    position: absolute;
+	opacity: 0;
+}
+
+/* qtip2 */
+.ui-tooltip-large {
+	max-width: 420px;
+	-moz-box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+	box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+}
+.ui-tooltip-large .ui-tooltip-content{
+	padding: 0px;
+}
+.ui-tooltip-exlarge {
+	max-width: 1420px;
+	-moz-box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+	box-shadow: 0 0 10px 1px rgba(0,0,0,.5);
+}
+.ui-tooltip-exlarge .ui-tooltip-content{
+	padding: 0px;
+}
+
+/* tab laterali */
+#tabs-right {
+	position: relative;
+	padding-right: 45px;
+}
+#tabs-right .ui-tabs-nav {
+	position: absolute;
+	right: 0.25em;
+	top: 0.25em;
+	width: 39px;
+	padding: 0.2em 0.2em 0.2em 0em;
+	overflow: hidden;
+}
+#tabs-right .ui-tabs-nav li {
+    margin-bottom: 2px;
+	width: 100%;
+	-moz-border-radius: 2px 4px 4px 2px;
+	-webkit-border-radius: 2px 4px 4px 2px;
+	border-radius: 2px 4px 4px 2px;
+	overflow: hidden;
+	background: none repeat scroll 0 0 #B3B3F3;
+	border: 0px none;
+}
+#tabs-right .ui-tabs-nav li.active {
+	background: none repeat scroll 0 0 #EFE003;
+}
+#tabs-right .ui-tabs-nav li.ui-tabs-selected {
+	background-color: #D50000;
+	padding-bottom: 0px;
+	right: 3px;
+}
+#tabs-right.ui-tabs .ui-tabs-nav li.ui-state-default:hover {
+	right: 3px;
+}
+#tabs-right .ui-tabs-nav li a {
+	width: 100%;
+}
+#tabs-right.ui-tabs .ui-tabs-nav li a {
+	 padding: 3px 2px;
+}
+#tabs-right.ui-tabs .tabw {
+	border: 3px solid #D50000;
+	-moz-box-shadow: 0 0 5px 1px rgba(213,0,0,.5);
+	-webkit-box-shadow: 0 0 5px 1px rgba(213,0,0,.5);
+	box-shadow: 0 0 5px 1px rgba(213,0,0,.5);
+	background: none repeat scroll 0 0 #414646;
+	overflow: visible;
+}
+#mlatbar {
+	margin-right: 10px;
+	position: absolute;
+	right: 15px;
+	top: 30px;
+}
+div.btabw {
+	border: 1px solid #FFA0A0;
+	min-height: 250px;
+	padding: 8px;
+	color: #CFCFCF;
+    text-shadow: 0 1px 0 #000000;
+    font-size: 1.1em;
+    position: relative;
+}
+div.btabw .mbody {
+	padding-bottom: 50px;
+}
+.btabw form {
+	width: 100%;
+}
+.btabw h3 {
+	border-bottom: 1px solid #999999;
+	margin: 10px 15px 7px 0;
+}
+.btabw label {
+	margin: 0 10px 0 5px;
+}
+.btabw .date {
+	width: 8.5em;
+}
+/* reload tab */
+.treload {
+	background-color: #FFFFFF;
+    height: 20px;
+	position: absolute;
+	right: -12px;
+	top: -17px;
+	width: 20px;
+	border: 3px solid #D3F3F3;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+/* simple tab */
+.tabsmpl {
+	background: transparent;
+	border: none;
+}
+.tabsmpl .ui-widget-header {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid #c0c0c0;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
+}
+.tabsmpl .ui-state-default {
+	background: transparent;
+	border: none;
+}
+.tabsmpl .ui-state-active {
+	background: transparent url(images/uiTabsArrow.png) no-repeat bottom center;
+	border: none;
+}
+.tabsmpl .ui-state-default a {
+	color: #555494;
+}
+.tabsmpl .ui-state-active a {
+	color: #D50000;
+}
+
+.cbutton {
+    -webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+    border-radius: 2px 2px 2px 2px;
+    color: black;
+    padding: 3px 9px;
+	text-shadow: none;
+	cursor: pointer;
+	display: inline-block;
+	margin: 3px;
+	font-size: 0.8em;
+	background: none repeat scroll 0 0 #E4E9D9;
+    border: 1px solid #000000;
+}
+.cbutton:hover {
+	background: none repeat scroll 0 0 #A4E9D9;
+    border: 1px solid #FFFFFF;
+}
+

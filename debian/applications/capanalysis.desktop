@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=CapAnalysis
+Exec=exo-open --launch WebBrowser http://localhost:9877
+Icon=video-display
+Terminal=false
+Categories=System;Monitor;

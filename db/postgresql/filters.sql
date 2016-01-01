@@ -1,0 +1,11 @@
+--
+-- Tabella dei filtri
+--
+CREATE TABLE IF NOT EXISTS filters (
+  id SERIAL NOT NULL PRIMARY KEY,
+  dataset_id INTEGER NOT NULL REFERENCES datasets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  name VARCHAR( 40 ) NOT NULL UNIQUE,
+  filter VARCHAR( 255 )
+);
+
+ALTER TABLE filters OWNER TO capana;

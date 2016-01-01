@@ -1,0 +1,12 @@
+Source: capanalysis
+Section: net
+Priority: optional
+Maintainer: Gianluca Costa (CapAnalysis) <g.costa@capanalysis.net>
+Build-Depends: debhelper (>= 7.0.50~), libpcap-dev, libsqlite3-dev, sqlite3, libssl-dev, libpq-dev
+Standards-Version: 3.9.1
+Homepage: http://www.capanalysis.net
+
+Package: capanalysis
+Architecture: any
+Depends:  ${shlibs:Depends}, tshark, apache2, php5-common, libapache2-mod-php5, php5-sqlite, php5-cli, sqlite3, openssl, postgresql, postgresql-client, php-mdb2-driver-pgsql, tar, php5-json
+Description: CapAnalysis

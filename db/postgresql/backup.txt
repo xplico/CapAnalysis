@@ -1,0 +1,8 @@
+To backup:
+sudo -u postgres pg_dump capana -f /tmp/capana_demo.sql
+
+To restore:
+sudo -u postgres psql
+CREATE DATABASE capana OWNER capana;
+
+sudo -u postgres psql -d capana -f /tmp/capana_demo.sql
