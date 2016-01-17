@@ -166,6 +166,7 @@ static int *SeDePcapIP(const char *main_dir, int ds_id, int *sd)
                 if (setsockopt(sd4, SOL_SOCKET, SO_REUSEPORT, (char *) &yes, sizeof(yes)) < 0) {
                     perror("SO_REUSEPORT");
                     close(sd4);
+                    LogPrintf(LV_ERROR, "SO_REUSEPORT");
                     return NULL;
                 }
 #endif
@@ -173,18 +174,20 @@ static int *SeDePcapIP(const char *main_dir, int ds_id, int *sd)
                 if (opts < 0) {
                     perror("fcntl(F_GETFL) failed");
                     close(sd4);
+                    LogPrintf(LV_ERROR, "fcntl(F_GETFL) failed");
                     return NULL;
                 }
                 opts = opts | O_NONBLOCK;
                 if (fcntl(sd4, F_SETFL, opts) < 0) {
                     perror("fcntl(F_SETFL) failed");
                     close(sd4);
+                    LogPrintf(LV_ERROR, "fcntl(F_SETFL) failed");
                     return NULL;
                 }
                 rv = bind(sd4, add->ai_addr, add->ai_addrlen);
                 if (rv == -1) {
-                    LogPrintf(LV_ERROR, "Cannot bind port");
                     close(sd4);
+                    LogPrintf(LV_ERROR, "Cannot bind port");
                     return NULL;
                 }
             }
@@ -207,12 +210,14 @@ static int *SeDePcapIP(const char *main_dir, int ds_id, int *sd)
                 if (setsockopt(sd6, SOL_SOCKET, SO_REUSEPORT, (char *) &yes, sizeof(yes)) < 0) {
                     perror("SO_REUSEPORT");
                     close(sd6);
+                    LogPrintf(LV_ERROR, "SO_REUSEPORT");
                     return NULL;
                 }
 #endif
                 if (setsockopt(sd6, IPPROTO_IPV6, IPV6_V6ONLY, &yes, sizeof(yes)) < 0) {
                     perror("IPV6_V6ONLY");
                     close(sd6);
+                    LogPrintf(LV_ERROR, "IPV6_V6ONLY");
                     return NULL;
                 }
                 
@@ -220,18 +225,20 @@ static int *SeDePcapIP(const char *main_dir, int ds_id, int *sd)
                 if (opts < 0) {
                     perror("fcntl(F_GETFL) failed");
                     close(sd6);
+                    LogPrintf(LV_ERROR, "fcntl(F_GETFL) failed");
                     return NULL;
                 }
                 opts = opts | O_NONBLOCK;
                 if (fcntl(sd6, F_SETFL, opts) < 0) {
                     perror("fcntl(F_SETFL) failed");
                     close(sd6);
+                    LogPrintf(LV_ERROR, "fcntl(F_SETFL) failed");
                     return NULL;
                 }
                 rv = bind(sd6, add->ai_addr, add->ai_addrlen);
                 if (rv == -1) {
-                    LogPrintf(LV_ERROR, "Cannot bind port");
                     close(sd6);
+                    LogPrintf(LV_ERROR, "Cannot bind port");
                     return NULL;
                 }
             }
@@ -260,6 +267,7 @@ static int *SeDePcapIP(const char *main_dir, int ds_id, int *sd)
         fprintf(fp, "%i\n", port);
         fclose(fp);
     }
+    LogPrintf(LV_INFO, "PCAPoIP: port %i", port);
 
     return sd;
 }
@@ -501,6 +509,7 @@ static void *SeDePcapThread(void *data)
         if (compl == TRUE) {
             sprintf(dec_pcap, CA_NEW_DIR"/%lu_%i_%i.pcap", main_dir, ds_id, tpcap, ds_id, cnt++);
             rename(file_pcap, dec_pcap);
+            LogPrintf(LV_INFO, "New pcap: %s", dec_pcap);
         }
     }
     
