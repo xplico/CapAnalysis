@@ -8,8 +8,8 @@ $credits[] = array('en' => 0, 'title' => 'SQLite', 'desc' => '<a href="http://ww
 $credits[] = array('en' => 1, 'title' => 'D3', 'desc' => '<a href="http://d3js.org/" title="D3.js">D3.js</a> is a JavaScript library for manipulating documents based on data. D3 helps you bring data to life using HTML, SVG and CSS. The source code for D3.js is in the <a href="https://github.com/mbostock/d3/blob/master/LICENSE"> public domain</a>.');
 $credits[] = array('en' => 1, 'title' => 'PostgreSQL', 'desc' => '<a href="http://www.postgresql.org/" title="PostgreSQL">PostgreSQL</a> is a powerful, open source object-relational database system. The <a href="http://opensource.org/licenses/postgresql">PostgreSQL License</a> gives you the freedom to use, modify and distribute PostgreSQL in any form you like, open or closed source.');
 $credits[] = array('en' => 1, 'title' => 'GeoLite databases', 'desc' => 'The GeoLite databases are distributed under the Creative Commons Attribution-ShareAlike 3.0 Unported License. <a href="http://www.maxmind.com">http://www.maxmind.com</a>.');
-$credits[] = array('en' => 0, 'title' => '', 'desc' => '');
-$credits[] = array('en' => 0, 'title' => '', 'desc' => '');
+$credits[] = array('en' => 1, 'title' => 'nDPI', 'desc' => '<a href="http://www.ntop.org/products/deep-packet-inspection/ndpi/" title="nDPI">nDPI</a>: Open and Extensible LGPLv3 Deep Packet Inspection Library.');
+$credits[] = array('en' => 1, 'title' => 'Xplico', 'desc' => '<a href="http://www.xplico.org" title="Xplico">Xplico</a>: Open Source Network Forensic Analysis Tool (NFAT). Xplico is released under the GNU General Public License.');
 $credits[] = array('en' => 0, 'title' => '', 'desc' => '');
 $credits_en = false;
 foreach ($credits as $credit) {
