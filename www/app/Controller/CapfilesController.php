@@ -48,6 +48,7 @@ class CapfilesController extends AppController {
     
     public function index($id = null) {
         if ($id != null) {
+			$this->Capfile->Dataset->recursive = -1;
             $this->Capfile->Dataset->id = $id;
             if (!$this->Capfile->Dataset->exists()) {
                 $this->redirect(array('controller' => 'users', 'action' => 'login'));
@@ -55,7 +56,7 @@ class CapfilesController extends AppController {
             }
             if ($this->Session->check('demo')) {
                 $params['conditions'] = array('Dataset.group_id' => $this->group_id, 'Dataset.name' => 'Set '.$this->Session->read('ip_usr'), 'Dataset.id' => $id);
-                $ds_count = $this->Item->Dataset->find('count', $params);
+                $ds_count = $this->Capfile->Dataset->find('count', $params);
                 if (!$ds_count) {
                     $this->Session->setFlash(__('Oops...'));
                     $this->redirect(array('controller' => 'users', 'action' => 'login'));

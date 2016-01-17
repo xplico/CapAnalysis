@@ -2,7 +2,7 @@
   /*
    CapAnalysis
 
-   Copyright 2012 Gianluca Costa (http://www.capanalysis.net) 
+   Copyright 2012-2016 Gianluca Costa (http://www.capanalysis.net) 
    All rights reserved.
   */
 class Item2PcapComponent extends Component {
@@ -34,7 +34,11 @@ class Item2PcapComponent extends Component {
         $pcap_file = Configure::read('Dataset.root').'/ds_'.$item['dataset_id'].'/raw/'.$fnum;
         if (file_exists($pcap_file)) {
             $cmd = "tshark -r ".$pcap_file." -Y \"".$filtr."\" -F libpcap -w ".$out_pcap;
-            system($cmd);
+            exec($cmd, $lln, $retval);
+            if ($retval != 0) { // old tshark
+				$cmd = "tshark -r ".$pcap_file." -R \"".$filtr."\" -F libpcap -w ".$out_pcap;
+				exec($cmd, $lln, $retval);
+			}
         }
         else {
             die();
