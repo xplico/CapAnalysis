@@ -18,7 +18,7 @@ class UsersController extends AppController {
 	public function login() {
         touch(Configure::read('Dataset.root').'/tmp/registred');
         //$this->Session->destroy();
-		$this->Session->write('vers', '1.2.0');
+		$this->Session->write('vers', '1.2.1');
         $this->Session->write('ip_usr', str_replace(array('.', ':'), '', $_SERVER['REMOTE_ADDR']));
         $this->Session->write('demo_limit', 20971520); // 20M
         //$this->Session->write('demo', true);

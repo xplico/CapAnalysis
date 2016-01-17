@@ -2,7 +2,7 @@
   /*
    CapAnalysis
 
-   Copyright 2012 Gianluca Costa (http://www.capanalysis.net) 
+   Copyright 2012-2016 Gianluca Costa (http://www.capanalysis.net) 
    All rights reserved.
   */
 
