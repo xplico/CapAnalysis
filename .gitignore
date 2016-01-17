@@ -1,0 +1,8 @@
+*.[oa]
+*~
+include/pkgbin.h
+release/
+tmp/
+doc/
+debian/files
+
