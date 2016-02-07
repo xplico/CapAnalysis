@@ -43,7 +43,7 @@
 	</div>
 	<?php endif; ?>
 	<div class="floatr">
-		<?php echo $this->Form->create('Item', array('action' => 'netcfg')); ?>
+		<?php echo $this->Form->create('Item', array('url' => 'netcfg')); ?>
 		<h3><?php echo __('Filter Type:');?></h3>
 		<div class="floatl grid_4 ">
 		<?php echo $this->Form->radio('type', array(__('OR'), __('AND')), array('value' => 1, 'legend' => false));?>

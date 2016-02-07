@@ -6,7 +6,7 @@
 -->
 <div id="protocfg" class="mbody">
 	<?php
-	echo $this->Form->create('Item', array('action' => 'protocfg'));
+	echo $this->Form->create('Item', array('url' => 'protocfg'));
 	echo $this->Form->select('proto', $fields, array('multiple' => 'checkbox', 'value' => $selected));
 	?>
 	<div class="clear">&nbsp;</div>

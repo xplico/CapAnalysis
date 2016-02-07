@@ -7,7 +7,7 @@
 
 <div id="viewcfg" class="mbody">
 	<?php
-	echo $this->Form->create('Item', array('action' => 'viewcfg'));
+	echo $this->Form->create('Item', array('url' => 'viewcfg'));
 	echo $this->Form->select('columns', $fields, array('multiple' => 'checkbox', 'value' => $selected));
 	?>
 	<div class="clear">&nbsp;</div>

@@ -6,7 +6,7 @@
 -->
 <div id="countrycfg" class="mbody">
 	<?php
-	echo $this->Form->create('Item', array('action' => 'countrycfg'));
+	echo $this->Form->create('Item', array('url' => 'countrycfg'));
 	echo $this->Form->select('country', $fields, array('multiple' => 'checkbox', 'value' => $selected));
 	?>
 	<div class="clear">&nbsp;</div>

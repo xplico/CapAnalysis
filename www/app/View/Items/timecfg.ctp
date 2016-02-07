@@ -60,7 +60,7 @@
 	</div>
 	<?php endif; ?>
 	<div class="floatr">
-		<?php echo $this->Form->create('Item', array('action' => 'timecfg')); ?>
+		<?php echo $this->Form->create('Item', array('url' => 'timecfg')); ?>
 		<div class="floatl grid_4">
 		<h3><?php echo __('Filter Type:');?></h3>
 		<?php echo $this->Form->radio('type', array(__('OR'), __('AND')), array('value' => 1, 'legend' => false));?>

@@ -6,7 +6,7 @@
 -->
 <div id="filecfg" class="mbody">
 	<?php
-	echo $this->Form->create('Item', array('action' => 'filecfg'));
+	echo $this->Form->create('Item', array('url' => 'filecfg'));
 	echo $this->Form->select('capfiles', $fields, array('multiple' => 'checkbox', 'value' => $selected));
 	?>
 	<div class="clear">&nbsp;</div>

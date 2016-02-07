@@ -29,7 +29,7 @@
 <div class="outcome">
 	<div class="outcome-bord" id="newdataset">
 		<div class="form">
-			<?php echo $this->Form->create('Dataset', array('action' => 'add', 'id'=>'jform')); ?>
+			<?php echo $this->Form->create('Dataset', array('url' => 'add', 'id'=>'jform')); ?>
 			<h2><?php echo __('DataSet'); ?></h2><br/>
 			<?php echo $this->Form->input('name', array('maxlength'=>'40', 'label' => __('Name').': ')); ?>
             <?php echo $this->Form->input('depth', array('label' => __('Depth').': ',
