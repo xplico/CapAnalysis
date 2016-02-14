@@ -41,7 +41,6 @@ static dbconf bconf;               /* a copy of native configuration */
 static int DBIntQuery(char *query, unsigned long *id)
 {
     int ret;
-    char *err = NULL;
     short try = 1;
     PGresult *res;
 
@@ -76,10 +75,10 @@ static int DBIntQuery(char *query, unsigned long *id)
 static int DBIntQueryStr(char *query, char *str, int len)
 {
     int ret;
-    char *err = NULL;
     short try = 1;
     PGresult *res;
-
+    char *val;
+    
     ret = -1;
     if (dbt == DB_POSTGRESQL) {
         do {
@@ -96,8 +95,14 @@ static int DBIntQueryStr(char *query, char *str, int len)
             }
         } while(try--);
         if (ret == 0 && str != NULL) {
-            if (strncpy(str, PQgetvalue(res, 0, 0), len) == len) {
-                LogPrintf(LV_ERROR, "Depth mal formed: %s", PQgetvalue(res, 0, 0));
+            val = PQgetvalue(res, 0, 0);
+            if (val != NULL) {
+                if (strlen(strncpy(str, val, len)) == len) {
+                    LogPrintf(LV_ERROR, "Depth mal formed: %s", PQgetvalue(res, 0, 0));
+                    str[0] = '\0';
+                }
+            }
+            else {
                 str[0] = '\0';
             }
         }
