@@ -244,7 +244,7 @@ class CapfilesController extends AppController {
             }
             do {
                 sleep(3);
-            } while (file_exists($file_path);
+            } while (file_exists($file_path));
             $this->redirect(array('action' => 'index'));
         }
         else {
