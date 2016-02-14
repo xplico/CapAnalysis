@@ -489,6 +489,18 @@ static int CapanaLoop(dbconf *db_c, char *root, time_t twpcap)
                     ds_tbl[i].rm = TRUE;
                 }
                 break;
+                
+            case CA_DP_TD:
+                break;
+                
+            case CA_DP_FD:
+                break;
+                
+            case CA_DP_SZ:
+                break;
+
+            default:
+                break;
             }
         }
         
