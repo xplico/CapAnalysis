@@ -48,7 +48,7 @@ class CapfilesController extends AppController {
     
     public function index($id = null) {
         if ($id != null) {
-			$this->Capfile->Dataset->recursive = -1;
+            $this->Capfile->Dataset->recursive = -1;
             $this->Capfile->Dataset->id = $id;
             if (!$this->Capfile->Dataset->exists()) {
                 $this->redirect(array('controller' => 'users', 'action' => 'login'));
@@ -211,5 +211,51 @@ class CapfilesController extends AppController {
         else {
             $this->set('capana', false);
         }
+    }
+
+    function uploadurl() {
+        if ($this->dataset_id == 0)
+            die();
+        $this->layout = 'tab';
+        $limit_on = 0;
+        
+        if ($this->request->is('post')) {
+            if ($this->Session->check('dspath'))
+                $dspath = $this->Session->read('dspath').'/new/';
+            else
+                $dspath = '/tmp/';
+            $filename = basename($this->request->data['Capfile']['url']);
+            $file_path = $dspath.$filename;
+            try {
+                if ($this->Session->check('demo')) {
+                    $head = array_change_key_case(get_headers($this->request->data['Capfile']['url'], TRUE));
+                    $filesize = $head['content-length'];
+                    if ($filesize > $this->Session->read('demo_limit')) {
+                        $this->Session->setFlash(_('File size exceeds the DEMO limit (20MB)'));
+                        $this->redirect(array('action' => 'index'));
+                    }
+                }
+                file_put_contents($file_path, fopen($this->request->data['Capfile']['url'], 'r'));
+                if (file_exists($file_path) && filesize($file_path) > 0)
+                    $this->Session->setFlash(_('Upload Completed'));
+                else
+                    $this->Session->setFlash(_('Upload Failed'));
+            } catch (Exception $e) {
+            }
+            sleep(2);
+            $this->redirect(array('action' => 'index'));
+        }
+        else {
+            if ($this->Session->check('demo')) {
+                $params = array();
+                $params['fields'] = array('SUM(Capfile.data_size) as size');
+                $params['conditions'] = array('Dataset.group_id' => $this->group_id, 'Dataset.name' => 'Set '.$this->Session->read('ip_usr'));
+                $file_lim_size = $this->Dataset->Capfile->find('first', $params);
+                $file_lim_size = $file_lim_size[0]['size']+0;
+                if ($file_lim_size >= $this->Session->read('demo_limit'))
+                    $limit_on = 1;
+            }
+        }
+        $this->set('limit_on', $limit_on);
     }
 }

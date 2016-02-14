@@ -15,10 +15,10 @@ class UploadComponent extends Component {
     protected $options;
 
     function initialize(Controller $controller) {
-		if ($this->Session->check('dspath'))
-			$dspath = $this->Session->read('dspath').'/new/';
-		else
-			$dspath = '/tmp/';
+        if ($this->Session->check('dspath'))
+            $dspath = $this->Session->read('dspath').'/new/';
+        else
+            $dspath = '/tmp/';
         $this->options = array(
             'script_url' => $this->getFullUrl().'/',
             'upload_dir' => $dspath,
