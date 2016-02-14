@@ -15,7 +15,7 @@ $this->Html->script('jquery.fileupload', array('inline' => false));
     <div id="tabs" class="tabs-nohdr tbl">
     <ul>
         <li><a href="#tabs-1" title="<?php echo __('List of All pcap files');?>"><?php echo __('PCAP Files'); ?></a></li>
-        <li><a href="<?php echo $this->Html->url(array('controller' => 'capfiles', 'action' => 'uploadurl')); ?>" title="<?php echo __('Upload PCAP file from URL'); ?>">URL Upload</a></li>
+        <li><a href="<?php echo $this->Html->url(array('controller' => 'capfiles', 'action' => 'uploadurl')); ?>" title="<?php echo __('Import from URL'); ?>">Import from URL</a></li>
         <li><a href="<?php echo $this->Html->url(array('controller' => 'capfiles', 'action' => 'pcapoverip')); ?>" title="<?php echo __('PCAP-over-IP connection info'); ?>">PCAP-over-IP</a></li>
     </ul>
     <div id="tabs-1">

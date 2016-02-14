@@ -242,7 +242,9 @@ class CapfilesController extends AppController {
                     $this->Session->setFlash(_('Upload Failed'));
             } catch (Exception $e) {
             }
-            sleep(2);
+            do {
+                sleep(3);
+            } while (file_exists($file_path);
             $this->redirect(array('action' => 'index'));
         }
         else {
