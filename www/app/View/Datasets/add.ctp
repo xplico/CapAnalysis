@@ -13,12 +13,6 @@
 <script>
 	$('#ds_num').text(<?php echo $ds_count; ?>);
 </script>
-<?php elseif ($this->Session->check('trial') && $ds_count >= 1): ?>
-<div class="outcome">
-	<div class="outcome-bord">
-	<h2><?php echo __('CapAnalysis-Trial is limited to One DataSet.'); ?></h2>
-	</div>
-</div>
 <?php elseif ($this->Session->check('demo')): ?>
 <div class="outcome">
 	<div class="outcome-bord">
@@ -59,18 +53,18 @@
     case '3': $('#fdv').show(); break;
     case '4': $('#szv').show(); break;
     }
-
+    
     $("#DatasetDepth").change(function() {
-        $('#eolv').hide();
-        $('#tdv').hide();
-        $('#fdv').hide();
-        $('#szv').hide();
-        switch ($(this).val()) {
-        case '1': $('#eolv').show(); break;
-        case '2': $('#tdv').show(); break;
-        case '3': $('#fdv').show(); break;
-        case '4': $('#szv').show(); break;
-        }
+          $('#eolv').hide();
+          $('#tdv').hide();
+          $('#fdv').hide();
+          $('#szv').hide();
+          switch ($(this).val()) {
+          case '1': $('#eolv').show(); break;
+          case '2': $('#tdv').show(); break;
+          case '3': $('#fdv').show(); break;
+          case '4': $('#szv').show(); break;
+          }
     });
 	
 	$('input:submit').button();
