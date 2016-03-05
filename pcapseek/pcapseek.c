@@ -1,8 +1,23 @@
 /* pcapseek.c
  *
- * Xplico System
+ * Xplico 
+ *
  * By Gianluca Costa <g.costa@capanalysis.net>
- * Copyright 2013 Gianluca Costa. Web: www.capanalysis.net
+ * Copyright 2012-16 Gianluca Costa. Web: www.capanalysis.net
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 #include <unistd.h>
@@ -27,12 +42,13 @@
 #include "hdr.h"
 
 
-#define PS_VER_MAG    1
-#define PS_VER_MIN    1
-#define PS_VER_REV    0
-#define PS_CR         "Copyright 2012-2014 Gianluca Costa.\nThis software is licensed with CC BY-NC-ND.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+#define PS_VER_MAG        1
+#define PS_VER_MIN        2
+#define PS_VER_REV        0
+#define PS_CR             "Copyright 2012-2016 Gianluca Costa.\nThis software is licensed under GNU GPL v2.1.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
-#define IPV6_DIM      16  /* ipv6 address size */
+#define IPV6_DIM          16  /* ipv6 address size */
+#define PKT_MAX_SRCH      (1024*1024) /* 1M */
 
 static char def;              /* true if flow has been identified */
 static char ipv6f;            /* true if IPv6 */
@@ -51,13 +67,14 @@ static struct iphdr *n_ip;
 static void Usage(char *name)
 {
     printf("\n");
-    printf("usage: %s [-v] -f <input_file> -s <pkt offset> -o <output_file> [-j <json_file>] [-d <sec>] [-h]\n", name);
+    printf("usage: %s [-v] -f <input_file> -s <pkt offset> -o <output_file> [-j <json_file>] [-d <sec>] [-n <pkt_num>] [-h]\n", name);
     printf("\t-v version\n");
     printf("\t-f input pcap file\n");
     printf("\t-s packet offset\n");
     printf("\t-o output pcap file\n");
     printf("\t-j JSON data files\n");
     printf("\t-d duration\n");
+    printf("\t-n number of packets\n");
     printf("\t-h this help\n");
     printf("\n");
 }
@@ -458,6 +475,90 @@ static char PktCheck(unsigned int dlt, struct pcap_pkthdr *h, u_char *bytes)
 }
 
 
+int SrchPktOffset(FILE *pcap_of, pcap_t *cap, unsigned long byte_offset)
+{
+    struct pcap_pkthdr packet_header_a;
+    struct pcap_pkthdr packet_header_b;
+    struct pcap_pkthdr *h;
+    const u_char *bytes;
+    
+    byte_offset++;
+    while (byte_offset > 0) {
+        byte_offset--;
+        fseek(pcap_of, byte_offset, SEEK_SET);
+        
+        /* first packet */
+        if (pcap_next_ex(cap, &h, &bytes) != 1) {
+            continue;
+        }
+        memcpy(&packet_header_a, h, sizeof(struct pcap_pkthdr));
+        if (packet_header_a.ts.tv_usec >= 1000000) {
+            continue;
+        }
+        if (packet_header_a.caplen > packet_header_a.len) {
+            continue;
+        }
+
+        /* second packet */
+        if (pcap_next_ex(cap, &h, &bytes) != 1) {
+            continue;
+        }
+        memcpy(&packet_header_b, h, sizeof(struct pcap_pkthdr));
+        if (packet_header_b.ts.tv_usec >= 1000000) {
+            continue;
+        }
+        if (packet_header_b.caplen > packet_header_b.len) {
+            continue;
+        }
+        if (packet_header_b.ts.tv_sec < packet_header_a.ts.tv_sec) {
+            continue;
+        }
+        if (packet_header_b.ts.tv_sec == packet_header_a.ts.tv_sec && packet_header_a.caplen == packet_header_a.len && packet_header_b.caplen == packet_header_b.len ) {
+            break;
+        }
+
+        /* third packet */
+        if (pcap_next_ex(cap, &h, &bytes) != 1) {
+            continue;
+        }
+        memcpy(&packet_header_a, h, sizeof(struct pcap_pkthdr));
+        if (packet_header_a.ts.tv_usec >= 1000000) {
+            continue;
+        }
+        if (packet_header_a.caplen > packet_header_a.len) {
+            continue;
+        }
+        if (packet_header_a.ts.tv_sec < packet_header_b.ts.tv_sec) {
+            continue;
+        }
+        if (packet_header_b.ts.tv_sec == packet_header_a.ts.tv_sec) {
+            break;
+        }
+        
+        /* fifth packet */
+        if (pcap_next_ex(cap, &h, &bytes) != 1) {
+            continue;
+        }
+        memcpy(&packet_header_b, h, sizeof(struct pcap_pkthdr));
+        if (packet_header_b.ts.tv_usec >= 1000000) {
+            continue;
+        }
+        if (packet_header_b.caplen > packet_header_b.len) {
+            continue;
+        }
+        if (packet_header_b.ts.tv_sec < packet_header_a.ts.tv_sec) {
+            continue;
+        }
+        if (packet_header_b.ts.tv_sec == packet_header_a.ts.tv_sec) {
+            break;
+        }
+    }
+    fseek(pcap_of, byte_offset, SEEK_SET);
+        
+    return 0;
+}
+
+
 int main(int argc, char *argv[])
 {
     char c;
@@ -465,7 +566,7 @@ int main(int argc, char *argv[])
     char out_file[1024];
     char json_file[1024];
     char check;
-    unsigned long tp;
+    unsigned long byte_offset;
     unsigned long pk_cnt;
     char errbuf[PCAP_ERRBUF_SIZE];
     pcap_t *cap;
@@ -477,15 +578,16 @@ int main(int argc, char *argv[])
     extern char *optarg;
     extern int optind, optopt;
     FILE *pcap_of;
-    unsigned long dur;
+    unsigned long dur, pkt_num;
     unsigned int dlt;
     struct timeval tstart;
     
-    tp = 0;
+    byte_offset = 0;
     check = 0;
     dur = 0;
     def = 0;
-    while ((c = getopt(argc, argv, "vf:s:o:hj:d:")) != -1) {
+    pkt_num = 0;
+    while ((c = getopt(argc, argv, "vf:s:o:hj:d:n:")) != -1) {
         switch(c) {
         case 'v':
             printf("pcapseek %d.%d.%d\n", PS_VER_MAG, PS_VER_MIN, PS_VER_REV);
@@ -498,7 +600,7 @@ int main(int argc, char *argv[])
             break;
 
         case 's':
-            tp = atol(optarg);
+            byte_offset = atol(optarg);
             check |= 0x02;
             break;
 
@@ -514,6 +616,10 @@ int main(int argc, char *argv[])
 
         case 'd':
             dur =  atol(optarg);
+            break;
+
+        case 'n':
+            pkt_num = atol(optarg);
             break;
 
         case 'h':
@@ -537,7 +643,7 @@ int main(int argc, char *argv[])
             exit(-1);
     }
     
-    printf("Packet offset: %lu dur: %lu\n", tp, dur);
+    printf("Packet offset: %lu dur: %lu\n", byte_offset, dur);
     
     pk_cnt = 0;
     cap = pcap_open_offline(in_file, errbuf);
@@ -564,11 +670,10 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if (tp != 0) {
-        fseek(pcap_of, tp, SEEK_SET);
+    if (byte_offset != 0) {
+        SrchPktOffset(pcap_of, cap, byte_offset);
     }
     dlt = pcap_datalink(cap);
-    
     while (pcap_next_ex(cap, &h, &bytes) == 1) {
         if (pk_cnt == 0) {
             tstart.tv_sec = h->ts.tv_sec;
@@ -597,12 +702,16 @@ int main(int argc, char *argv[])
                 else
                     break;
             } while (wcnt != h->caplen);
+
+            if (pkt_num == pk_cnt) {
+                break;
+            }
         }
         else if (pk_cnt == 0) {
             /* some layers are missing */
-            
         }
     }
+    
     fclose(fp_pcap);
     pcap_close(cap);
 
