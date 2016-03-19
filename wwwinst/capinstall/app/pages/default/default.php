@@ -49,7 +49,7 @@
 			<?php switch ($help):
 				case 1: ?>
 				<p>To start CapAnalysis open a terminal-shell and use the command: </p>
-				<code>sudo service capanalysis start</code>
+				<code>sudo systemctl start capanalysis.service</code>
 				<p>and after reload this page.</p>
 				<?php break; ?>
 			<?php case 4: ?>
@@ -57,7 +57,7 @@
 				<p>PostgreSQL <span class="label label-important">is not running</span>.</p>
 				<p>
 				To fix the problem restart PostgreSQL daemon:<br/>
-				<code>sudo service postgresql restart</code>
+				<code>sudo systemctl start postgresql.service</code>
 				</p>
 				<?php else: if ($db_usr == False): ?>
 				<p>CapAnalysis <span class="label label-important"> the user DB failed the authentication</span>.</p>
