@@ -41,7 +41,10 @@ endif
 SUBDIRS = pcapseek
 
 # xplico modules
-XMODULES= dis_dns_ca.so dis_tcp_ca.so dis_udp_ca.so disp_none.so disp_capostgres.so cap_ca.so cap_pcap.so dis_pcapf.so dis_pol.so dis_eth.so dis_pppoe.so dis_ppp.so dis_ip_nocheck.so dis_ipv6.so dis_tcp_soft.so dis_tcp_soft_nocheck.so dis_udp_nocheck.so dis_vlan.so dis_sll.so dis_ieee80211.so dis_llc.so dis_ppi.so dis_prism.so dis_ipsec.so dis_ipsec_ca.so dis_null.so dis_radiotap.so dis_mpls.so
+XMODULES = dis_dns_ca.so dis_tcp_ca.so dis_udp_ca.so disp_none.so disp_capostgres.so cap_ca.so cap_pcap.so dis_pcapf.so
+XMODULES += dis_pol.so dis_eth.so dis_pppoe.so dis_ppp.so dis_ip_nocheck.so dis_ipv6.so dis_tcp_soft.so dis_tcp_soft_nocheck.so
+XMODULES += dis_udp_nocheck.so dis_vlan.so dis_sll.so dis_ieee80211.so dis_llc.so dis_ppi.so dis_prism.so dis_ipsec.so dis_ipsec_ca.so
+XMODULES += dis_null.so dis_radiotap.so dis_mpls.so dis_l2tp.so dis_chdlc.so dis_gre.so
 
 MODULE_PATH = modules
 
@@ -60,6 +63,11 @@ CFLAGS = -rdynamic $(INCLUDE_DIR) -Wall -fPIC -D_FILE_OFFSET_BITS=64
 CFLAGS += $(INCLUDE_DIR)
 
 #CFLAGS += -DVER_PRO=1
+
+# PostgreSQL
+CFLAGS += $(shell pkg-config --cflags libpq)
+LDFLAGS += $(shell pkg-config --libs libpq)
+
 
 # optmimization
 ifdef O3
