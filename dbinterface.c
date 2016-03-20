@@ -26,7 +26,7 @@
 #include <time.h>
 #include <string.h>
 #include <sqlite3.h>
-#include <postgresql/libpq-fe.h>
+#include <libpq-fe.h>
 
 #include "dbinterface.h"
 #include "log.h"

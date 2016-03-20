@@ -14,6 +14,7 @@ class CapanaComponent extends Component {
 			if ($foca) {
 				$capana_pid = fgets($foca, 200);
 				fclose($foca);
+				$capana_pid = str_replace(array("\r\n", "\n", "\r"), ' ', $capana_pid);
 				$foca = popen('ps -p '.$capana_pid.' | grep capanalysis', 'r');
 				if ($foca) {
 					while (!feof($foca)) {

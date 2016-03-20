@@ -19,11 +19,13 @@ if (isset($enable_dbg)) {
 // funzione caricamento modelli
 function LoadModels($model_dir) {
     $files = scandir($model_dir);
-    foreach ($files as $file) {
+    if (is_array($files)) {
+    	foreach ($files as $file) {
 		if (strstr($file, '.php') != FALSE) {
 	    	include $model_dir.'/'.$file;
 		}
-    }
+    	}
+     }
 }
 
 // funzione per il caricamento dei contenuti
