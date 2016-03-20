@@ -49,6 +49,8 @@
 			<?php switch ($help):
 				case 1: ?>
 				<p>To start CapAnalysis open a terminal-shell and use the command: </p>
+				<code>sudo service capanalysis start</code>
+				<p>or:</p>
 				<code>sudo systemctl start capanalysis.service</code>
 				<p>and after reload this page.</p>
 				<?php break; ?>
@@ -57,6 +59,8 @@
 				<p>PostgreSQL <span class="label label-important">is not running</span>.</p>
 				<p>
 				To fix the problem restart PostgreSQL daemon:<br/>
+                <code>sudo service postgresql restart</code>
+				<p>or:</p>
 				<code>sudo systemctl start postgresql.service</code>
 				</p>
 				<?php else: if ($db_usr == False): ?>
