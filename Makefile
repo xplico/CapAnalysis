@@ -181,6 +181,12 @@ installcp: all
 	cp -a db/postgresql $(INSTALL_DIR)/db/
 	cp -a config/canalysis.cfg config/xplico_capostgres.cfg config/apache_capana.conf $(INSTALL_DIR)/cfg
 	cp -a wwwinst $(INSTALL_DIR)/www
+	mkdir -p $(INSTALL_DIR)/www/app/tmp/cache/persistent
+	mkdir -p $(INSTALL_DIR)/www/app/tmp/cache/models
+	mkdir -p $(INSTALL_DIR)/www/app/tmp/cache/views
+	mkdir -p $(INSTALL_DIR)/www/app/tmp/sessions
+	mkdir -p $(INSTALL_DIR)/www/app/tmp/logs
+
 ifeq ($(wildcard GeoLiteCity.dat), GeoLiteCity.dat)
 	cp -a GeoLiteCity.dat $(INSTALL_DIR)/bin/
 endif
