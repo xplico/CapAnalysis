@@ -93,8 +93,6 @@ endif
 
 # sqlite version
 LDFLAGS += -lsqlite3
-# postgres
-LDFLAGS += -lpq
 
 # To make it visible
 export CC CCPP ROOT_DIR CFLAGS LDFLAGS INCLUDE_DIR INSTALL_DIR GEOIP_LIB
