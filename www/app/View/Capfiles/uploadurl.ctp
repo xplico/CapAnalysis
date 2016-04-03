@@ -15,10 +15,13 @@
 <?php else: ?>
 <div class="outcome">
 	<div class="outcome-bord" id="newdataset">
-    <h2><?php echo __('Import from URL'); ?></h2><br/><br/>
+    <h2><?php echo __('Import from URL (pcap file or zip file with pcap files inside)'); ?></h2><br/><br/>
 		<div class="form">
 			<?php echo $this->Form->create('Capfile', array('url' => 'uploadurl', 'id'=>'jform')); ?>
 			<?php echo $this->Form->input('url', array('maxlength'=>'140', 'label' => __('URL').': ')); ?>
+            <div id="zip_password" class="dispoff">
+            <?php echo $this->Form->input('password', array('maxlength'=>'140', 'label' => __('ZIP password').': ')); ?>
+            </div>
       <?php echo $this->Form->end(__('Submit')); ?><br/>
     <div>
 	</div>
@@ -34,10 +37,21 @@
 <?php endif; ?>
 <script>
 $(function() {
-  $('input:submit').click(function() {
-      $('#newdataset').hide(100);
-      $('#waitupload').show(400);
-  });
+    $("#CapfileUrl").on('input', function() {
+        var url = $(this).val();
+        var ext = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2);
+        if (ext == 'zip' || ext == 'ZIP') {
+            $('#zip_password').show(400);
+        }
+        else {
+            $('#CapfilePassword').val('');
+            $('#zip_password').hide(100);
+        }
+    });
+    $('input:submit').click(function() {
+        $('#newdataset').hide(100);
+        $('#waitupload').show(400);
+    });
 	$('input:submit').button();
 });
 </script>

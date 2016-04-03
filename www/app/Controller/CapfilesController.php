@@ -30,6 +30,11 @@ class CapfilesController extends AppController {
             }
         }
     }
+
+    private function isDirEmpty($dir) {
+        if (!is_readable($dir)) return TRUE; 
+        return (count(scandir($dir)) == 2);
+    }
     
     public function beforeFilter() {
         parent::beforeFilter();
@@ -218,14 +223,24 @@ class CapfilesController extends AppController {
             die();
         $this->layout = 'tab';
         $limit_on = 0;
+        $zip = FALSE;
         
         if ($this->request->is('post')) {
-            if ($this->Session->check('dspath'))
+            if ($this->Session->check('dspath')) {
                 $dspath = $this->Session->read('dspath').'/new/';
-            else
+            }
+            else {
                 $dspath = '/tmp/';
+            }
             $filename = basename($this->request->data['Capfile']['url']);
-            $file_path = $dspath.$filename;
+            $password = $this->request->data['Capfile']['password'];
+            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+            if ($ext != 'zip')
+                $file_path = $dspath.$filename;
+            else {
+                $file_path = '/tmp/'.$filename;
+                $zip = TRUE;
+            }
             try {
                 if ($this->Session->check('demo')) {
                     $head = array_change_key_case(get_headers($this->request->data['Capfile']['url'], TRUE));
@@ -236,15 +251,28 @@ class CapfilesController extends AppController {
                     }
                 }
                 file_put_contents($file_path, fopen($this->request->data['Capfile']['url'], 'r'));
-                if (file_exists($file_path) && filesize($file_path) > 0)
+                if (file_exists($file_path) && filesize($file_path) > 0) {
                     $this->Session->setFlash(_('Upload Completed'));
-                else
+                }
+                else {
                     $this->Session->setFlash(_('Upload Failed'));
+                }
             } catch (Exception $e) {
             }
+            if ($zip) {
+                if ($password != '') {
+                    system('unzip -j -P '.$password.' '.$file_path.' -d '.$dspath);
+                }
+                else {
+                    system('unzip -j '.$file_path.' -d '.$dspath);
+                }
+                unlink($file_path);
+            }
+            // check file startup elaboration
             do {
-                sleep(3);
-            } while (file_exists($file_path));
+                sleep(2);
+            } while (!$this->isDirEmpty($dspath));
+            
             $this->redirect(array('action' => 'index'));
         }
         else {
