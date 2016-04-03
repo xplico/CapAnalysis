@@ -15,18 +15,16 @@
 <?php else: ?>
 <div class="outcome">
 	<div class="outcome-bord" id="newdataset">
-    <h2><?php echo __('Import from URL (pcap file or zip file with pcap files inside)'); ?></h2><br/><br/>
-		<div class="form">
+        <h2><?php echo __('Import from URL (pcap file or zip file with pcap files inside)'); ?></h2><br/><br/>
+		<div>
 			<?php echo $this->Form->create('Capfile', array('url' => 'uploadurl', 'id'=>'jform')); ?>
 			<?php echo $this->Form->input('url', array('maxlength'=>'140', 'label' => __('URL').': ')); ?>
             <div id="zip_password" class="dispoff">
             <?php echo $this->Form->input('password', array('maxlength'=>'140', 'label' => __('ZIP password').': ')); ?>
             </div>
-      <?php echo $this->Form->end(__('Submit')); ?><br/>
-    <div>
+            <?php echo $this->Form->end(__('Submit')); ?><br/>
+        </div>
 	</div>
-</div>
-</div>
 </div>
 <div class="outcome dispoff" id="waitupload">
 	<div class="outcome-bord">

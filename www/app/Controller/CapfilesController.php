@@ -233,6 +233,10 @@ class CapfilesController extends AppController {
                 $dspath = '/tmp/';
             }
             $filename = basename($this->request->data['Capfile']['url']);
+            if ($filename == '') {
+                $this->Session->setFlash(_('Upload Failed'));
+                $this->redirect(array('action' => 'index'));
+            }
             $password = $this->request->data['Capfile']['password'];
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
             if ($ext != 'zip')
