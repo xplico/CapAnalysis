@@ -144,7 +144,6 @@ clean: reset
 	@for dir in $(SUBDIRS) ; do $(MAKE) -C $$dir clean; done
 	rm -f capanalysis xplico *.o *~ *.log .depend val.* *.expand
 	rm -rf debian/capanalysis*
-	rm -f include/pkgbin.h
 	rm -rf $(MODULE_PATH)
 	rm -f */*~
 	rm -f */*/*~

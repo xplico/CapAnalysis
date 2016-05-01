@@ -8,5 +8,5 @@ Homepage: http://www.capanalysis.net
 
 Package: capanalysis
 Architecture: any
-Depends:  ${shlibs:Depends}, tshark, apache2, php5-common, libapache2-mod-php5, php5-sqlite, php5-cli, sqlite3, openssl, postgresql, postgresql-client, php-mdb2-driver-pgsql, tar, php5-json
+Depends:  ${shlibs:Depends}, tshark, apache2, php-common, libapache2-mod-php, php-sqlite3, php-cli, sqlite3, openssl, postgresql, postgresql-client, php-mdb2-driver-pgsql, tar, php-json, libgeoip-dev, libndpi-dev, libjson-c-dev
 Description: CapAnalysis
