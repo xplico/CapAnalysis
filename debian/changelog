@@ -1,3 +1,11 @@
+capanalysis (1.2.1) stable; urgency=low
+  * improved DPI
+  * PHP framework upgraded 
+  * bugs fixed
+  * upload pcap files from URL
+
+ -- Gianluca Costa (CapAnalysis) <support@capanalysis.net>  Sun, 8 May 2016 17:07:02 +0200
+
 capanalysis (1.2.0) stable; urgency=low
   * improved DPI
   * PHP framework upgraded 
