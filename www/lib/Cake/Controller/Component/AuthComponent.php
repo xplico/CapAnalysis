@@ -359,7 +359,7 @@ class AuthComponent extends Component {
 			return true;
 		}
 
-		if (!$controller->request->is('ajax')) {
+		if (!$controller->request->is('ajax') && !$controller->request->is('json')) {
 			$this->flash($this->authError);
 			$this->Session->write('Auth.redirect', $controller->request->here(false));
 			$controller->redirect($this->loginAction);
@@ -611,8 +611,12 @@ class AuthComponent extends Component {
 			$user = $this->identify($this->request, $this->response);
 		}
 		if ($user) {
-			$this->Session->renew();
-			$this->Session->write(static::$sessionKey, $user);
+			if (static::$sessionKey) {
+				$this->Session->renew();
+				$this->Session->write(static::$sessionKey, $user);
+			} else {
+				static::$_user = $user;
+			}
 			$event = new CakeEvent('Auth.afterIdentify', $this, array('user' => $user));
 			$this->_Collection->getController()->getEventManager()->dispatch($event);
 		}
@@ -655,7 +659,7 @@ class AuthComponent extends Component {
  * cookies + sessions will be used.
  *
  * @param string|null $key field to retrieve. Leave null to get entire User record
- * @return array|null User record. or null if no user is logged in.
+ * @return mixed|null User record. or null if no user is logged in.
  * @link http://book.cakephp.org/2.0/en/core-libraries/components/authentication.html#accessing-the-logged-in-user
  */
 	public static function user($key = null) {

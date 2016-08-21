@@ -97,6 +97,7 @@ class CakeRequest implements ArrayAccess {
  */
 	protected $_detectors = array(
 		'get' => array('env' => 'REQUEST_METHOD', 'value' => 'GET'),
+		'patch' => array('env' => 'REQUEST_METHOD', 'value' => 'PATCH'),
 		'post' => array('env' => 'REQUEST_METHOD', 'value' => 'POST'),
 		'put' => array('env' => 'REQUEST_METHOD', 'value' => 'PUT'),
 		'delete' => array('env' => 'REQUEST_METHOD', 'value' => 'DELETE'),
@@ -165,7 +166,7 @@ class CakeRequest implements ArrayAccess {
 		if ($_POST) {
 			$this->data = $_POST;
 		} elseif (($this->is('put') || $this->is('delete')) &&
-			strpos(env('CONTENT_TYPE'), 'application/x-www-form-urlencoded') === 0
+			strpos($this->contentType(), 'application/x-www-form-urlencoded') === 0
 		) {
 				$data = $this->_readInput();
 				parse_str($data, $this->data);
@@ -288,7 +289,6 @@ class CakeRequest implements ArrayAccess {
  * the unnecessary part from $base to prevent issue #3318.
  *
  * @return string Base URL
- * @link https://cakephp.lighthouseapp.com/projects/42648-cakephp/tickets/3318
  */
 	protected function _base() {
 		$dir = $webroot = null;
@@ -396,6 +396,19 @@ class CakeRequest implements ArrayAccess {
 	}
 
 /**
+ * Get the content type used in this request.
+ * 
+ * @return string
+ */
+	public function contentType() {
+		$type = env('CONTENT_TYPE');
+		if ($type) {
+			return $type;
+		}
+		return env('HTTP_CONTENT_TYPE');
+	}
+
+/**
  * Get the IP the client is using, or says they are using.
  *
  * @param bool $safe Use safe = false when you think the user might manipulate their HTTP_CLIENT_IP
@@ -405,20 +418,10 @@ class CakeRequest implements ArrayAccess {
 	public function clientIp($safe = true) {
 		if (!$safe && env('HTTP_X_FORWARDED_FOR')) {
 			$ipaddr = preg_replace('/(?:,.*)/', '', env('HTTP_X_FORWARDED_FOR'));
+		} elseif (!$safe && env('HTTP_CLIENT_IP')) {
+			$ipaddr = env('HTTP_CLIENT_IP');
 		} else {
-			if (env('HTTP_CLIENT_IP')) {
-				$ipaddr = env('HTTP_CLIENT_IP');
-			} else {
-				$ipaddr = env('REMOTE_ADDR');
-			}
-		}
-
-		if (env('HTTP_CLIENTADDRESS')) {
-			$tmpipaddr = env('HTTP_CLIENTADDRESS');
-
-			if (!empty($tmpipaddr)) {
-				$ipaddr = preg_replace('/(?:,.*)/', '', $tmpipaddr);
-			}
+			$ipaddr = env('REMOTE_ADDR');
 		}
 		return trim($ipaddr);
 	}
@@ -436,6 +439,9 @@ class CakeRequest implements ArrayAccess {
 		if (!empty($ref) && !empty($base)) {
 			if ($local && strpos($ref, $base) === 0) {
 				$ref = substr($ref, strlen($base));
+				if (empty($ref)) {
+					$ref = '/';
+				}
 				if ($ref[0] !== '/') {
 					$ref = '/' . $ref;
 				}
@@ -1119,6 +1125,9 @@ class CakeRequest implements ArrayAccess {
  * @return bool
  */
 	public function offsetExists($name) {
+		if ($name === 'url' || $name === 'data') {
+			return true;
+		}
 		return isset($this->params[$name]);
 	}
 

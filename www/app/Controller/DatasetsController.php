@@ -160,7 +160,7 @@ class DatasetsController extends AppController {
     $this->layout = 'tab';
     $this->Dataset->recursive = -1;
     $added = false;
-        $error = true;
+    $error = true;
     if ($this->request->is('post') && !$this->Session->check('demo')) {
       $this->Dataset->create();
       $this->request->data['Dataset']['share'] = md5($this->request->data['Dataset']['name'].time());

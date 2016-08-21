@@ -184,6 +184,13 @@ class DboSource extends DataSource {
 	protected $_sqlOps = array('like', 'ilike', 'rlike', 'or', 'not', 'in', 'between', 'regexp', 'similar to');
 
 /**
+ * The set of valid SQL boolean operations usable in a WHERE statement
+ *
+ * @var array
+ */
+	protected $_sqlBoolOps = array('and', 'or', 'not', 'and not', 'or not', 'xor', '||', '&&');
+
+/**
  * Indicates the level of nested transactions
  *
  * @var int
@@ -1490,34 +1497,38 @@ class DboSource extends DataSource {
 		$primaryKey = $Model->primaryKey;
 		$foreignKey = $Model->hasMany[$association]['foreignKey'];
 
+		// Make one pass through children and collect by parent key
+		// Make second pass through parents and associate children
+		$mergedByFK = array();
+		foreach ($assocResultSet as $data) {
+			$fk = $data[$association][$foreignKey];
+			if (! array_key_exists($fk, $mergedByFK)) {
+				$mergedByFK[$fk] = array();
+			}
+			if (count($data) > 1) {
+				$data = array_merge($data[$association], $data);
+				unset($data[$association]);
+				foreach ($data as $key => $name) {
+					if (is_numeric($key)) {
+						$data[$association][] = $name;
+						unset($data[$key]);
+					}
+				}
+				$mergedByFK[$fk][] = $data;
+			} else {
+				$mergedByFK[$fk][] = $data[$association];
+			}
+		}
+
 		foreach ($resultSet as &$result) {
 			if (!isset($result[$modelAlias])) {
 				continue;
 			}
-
-			$resultPrimaryKey = $result[$modelAlias][$primaryKey];
-
 			$merged = array();
-			foreach ($assocResultSet as $data) {
-				if ($resultPrimaryKey !== $data[$association][$foreignKey]) {
-					continue;
-				}
-
-				if (count($data) > 1) {
-					$data = array_merge($data[$association], $data);
-					unset($data[$association]);
-					foreach ($data as $key => $name) {
-						if (is_numeric($key)) {
-							$data[$association][] = $name;
-							unset($data[$key]);
-						}
-					}
-					$merged[] = $data;
-				} else {
-					$merged[] = $data[$association];
-				}
+			$pk = $result[$modelAlias][$primaryKey];
+			if (isset($mergedByFK[$pk])) {
+				$merged = $mergedByFK[$pk];
 			}
-
 			$result = Hash::mergeDiff($result, array($association => $merged));
 		}
 	}
@@ -2298,6 +2309,7 @@ class DboSource extends DataSource {
 
 		$this->_transactionNesting = 0;
 		if ($this->fullDebug) {
+			$this->took = $this->numRows = $this->affected = false;
 			$this->logQuery('BEGIN');
 		}
 		return $this->_transactionStarted = $this->_connection->beginTransaction();
@@ -2311,6 +2323,7 @@ class DboSource extends DataSource {
 	protected function _beginNested() {
 		$query = 'SAVEPOINT LEVEL' . ++$this->_transactionNesting;
 		if ($this->fullDebug) {
+			$this->took = $this->numRows = $this->affected = false;
 			$this->logQuery($query);
 		}
 		$this->_connection->exec($query);
@@ -2331,6 +2344,7 @@ class DboSource extends DataSource {
 
 		if ($this->_transactionNesting === 0) {
 			if ($this->fullDebug) {
+				$this->took = $this->numRows = $this->affected = false;
 				$this->logQuery('COMMIT');
 			}
 			$this->_transactionStarted = false;
@@ -2353,6 +2367,7 @@ class DboSource extends DataSource {
 	protected function _commitNested() {
 		$query = 'RELEASE SAVEPOINT LEVEL' . $this->_transactionNesting--;
 		if ($this->fullDebug) {
+			$this->took = $this->numRows = $this->affected = false;
 			$this->logQuery($query);
 		}
 		$this->_connection->exec($query);
@@ -2373,6 +2388,7 @@ class DboSource extends DataSource {
 
 		if ($this->_transactionNesting === 0) {
 			if ($this->fullDebug) {
+				$this->took = $this->numRows = $this->affected = false;
 				$this->logQuery('ROLLBACK');
 			}
 			$this->_transactionStarted = false;
@@ -2395,6 +2411,7 @@ class DboSource extends DataSource {
 	protected function _rollbackNested() {
 		$query = 'ROLLBACK TO SAVEPOINT LEVEL' . $this->_transactionNesting--;
 		if ($this->fullDebug) {
+			$this->took = $this->numRows = $this->affected = false;
 			$this->logQuery($query);
 		}
 		$this->_connection->exec($query);
@@ -2668,7 +2685,6 @@ class DboSource extends DataSource {
 	public function conditionKeysToString($conditions, $quoteValues = true, Model $Model = null) {
 		$out = array();
 		$data = $columnType = null;
-		$bool = array('and', 'or', 'not', 'and not', 'or not', 'xor', '||', '&&');
 
 		foreach ($conditions as $key => $value) {
 			$join = ' AND ';
@@ -2685,8 +2701,8 @@ class DboSource extends DataSource {
 				continue;
 			} elseif (is_numeric($key) && is_string($value)) {
 				$out[] = $this->_quoteFields($value);
-			} elseif ((is_numeric($key) && is_array($value)) || in_array(strtolower(trim($key)), $bool)) {
-				if (in_array(strtolower(trim($key)), $bool)) {
+			} elseif ((is_numeric($key) && is_array($value)) || in_array(strtolower(trim($key)), $this->_sqlBoolOps)) {
+				if (in_array(strtolower(trim($key)), $this->_sqlBoolOps)) {
 					$join = ' ' . strtoupper($key) . ' ';
 				} else {
 					$key = $join;
@@ -3186,10 +3202,13 @@ class DboSource extends DataSource {
 				$statement->bindValue($i, $val, $columnMap[$col]);
 				$i += 1;
 			}
+			$t = microtime(true);
 			$statement->execute();
 			$statement->closeCursor();
 
 			if ($this->fullDebug) {
+				$this->took = round((microtime(true) - $t) * 1000, 0);
+				$this->numRows = $this->affected = $statement->rowCount();
 				$this->logQuery($sql, $value);
 			}
 		}
