@@ -609,6 +609,8 @@ int SeDeFind(char *main_dir, dsdec *tbl, int dim)
     int len_ds, ret;
     char dir_path[CA_FILENAME_PATH];
     char pcapip_port[CA_FILENAME_PATH];
+    char cmd[10*CA_FILENAME_PATH];
+    FILE *fp;
     pthread_t pid;
     pcapip_thr *thr_info;
     
@@ -648,8 +650,23 @@ int SeDeFind(char *main_dir, dsdec *tbl, int dim)
                         DBIntDbTable(main_dir, ds_id);
                         SeDeCreateDirs(main_dir, ds_id);
                     }
-                    else
+                    else {
                         LogPrintf(LV_INFO, "DataSet dir: %s", dir_path);
+                    }
+                        
+                    /* enable samba shared folder */
+                    sprintf(cmd, CA_SAMBA_RM_DS, ds_id, ds_id);
+                    ret = system(cmd);
+                    fp = fopen(CA_SAMBA_CFG_FILE, "a");
+                    if (fp != NULL) {
+                        sprintf(cmd, CA_NEW_DIR, main_dir, ds_id);
+                        chmod(cmd, S_IRWXU | S_IRWXG | S_IRWXO);
+                        LogPrintf(LV_INFO, "SMB name: "CA_SAMBA_FOLDER_NAME, ds_id);
+                        fprintf(fp, CA_SAMBA_ADD_DS, ds_id, ds_id, main_dir, ds_id, ds_id);
+                        fclose(fp);
+                        ret = system(CA_SAMBA_RESTART_SERVICE);
+                        ret = system(CA_SAMBA_RESTART_SYSTEMCTL);
+                    }
                     tbl[next].ds_id = ds_id;
                     tbl[next].run = FALSE;
                     memset(&tbl[next].pid, 0, sizeof(task));

@@ -55,6 +55,13 @@
 /* capana config file */
 #define CA_DEFAULT_POSTGRES_CFG  "%s/cfg/capana_postgres.cfg"
 
+/* samba add and remove folder */
+#define CA_SAMBA_FOLDER_NAME           "capanalysis_%i"
+#define CA_SAMBA_CFG_FILE              "/etc/samba/smb.conf"
+#define CA_SAMBA_ADD_DS                "#capanalysis_s_ds_%08i\n["CA_SAMBA_FOLDER_NAME"]\n  path = "CA_NEW_DIR"\n  read only = no\n  browseable = yes\n  guest ok = yes\n#capanalysis_e_ds_%08i\n"
+#define CA_SAMBA_RM_DS                 "sed -i '/#capanalysis_s_ds_%08i/,/#capanalysis_e_ds_%08i/d' "CA_SAMBA_CFG_FILE
+#define CA_SAMBA_RESTART_SERVICE       "service smbd restart; service nmbd restart"
+#define CA_SAMBA_RESTART_SYSTEMCTL     "systemctl restart smbd nmbd"
 
 /** boolean type */
 typedef unsigned char bool;

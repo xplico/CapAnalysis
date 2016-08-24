@@ -176,6 +176,8 @@ static int CapanaLoop(dbconf *db_c, char *root, time_t twpcap)
     num = 0;
     pf_id = 0;
     fnd = CA_FIND_DS;
+    ret = 0;
+    ret = ret;
     
     /* main loop */
     while (1) {
@@ -380,6 +382,12 @@ static int CapanaLoop(dbconf *db_c, char *root, time_t twpcap)
                 /* delete files */
                 sprintf(cmd, "rm -rf "CA_DS_DIR, root, ds_tbl[i].ds_id);
                 ret = system(cmd);
+                /* remove samba shared folder */
+                sprintf(cmd, CA_SAMBA_RM_DS, ds_tbl[i].ds_id, ds_tbl[i].ds_id);
+                ret = system(cmd);
+                ret = system(CA_SAMBA_RESTART_SERVICE);
+                ret = system(CA_SAMBA_RESTART_SYSTEMCTL);
+                
                 CapanaDecInit(&(ds_tbl[i]));
                 num--;
             }
@@ -882,6 +890,9 @@ static int UInstall(char *root)
     char cfg_file[CA_FILENAME_PATH];
     char tmp[CA_FILENAME_PATH];
     int ret;
+
+    ret = 0;
+    ret = ret;
     
     /* remove all cache */
     sprintf(tmp, "rm -f %s/www/app/tmp/sessions/*", root);

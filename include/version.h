@@ -26,7 +26,7 @@
 
 #define CAPANA_VER_MAG 1
 #define CAPANA_VER_MIN 2
-#define CAPANA_VER_REV 1
+#define CAPANA_VER_REV 2
 
 #define CAPANA_CR         "Copyright 2012-2016 Gianluca Costa.\nThis is free software; see the source for copying conditions. There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 
