@@ -17,6 +17,7 @@ $this->Html->script('jquery.fileupload', array('inline' => false));
         <li><a href="#tabs-1" title="<?php echo __('List of All pcap files');?>"><?php echo __('PCAP Files'); ?></a></li>
         <li><a href="<?php echo $this->Html->url(array('controller' => 'capfiles', 'action' => 'uploadurl')); ?>" title="<?php echo __('Import from URL'); ?>">Import from URL</a></li>
         <li><a href="<?php echo $this->Html->url(array('controller' => 'capfiles', 'action' => 'pcapoverip')); ?>" title="<?php echo __('PCAP-over-IP connection info'); ?>">PCAP-over-IP</a></li>
+        <li><a href="<?php echo $this->Html->url(array('controller' => 'capfiles', 'action' => 'sharedfolder')); ?>" title="<?php echo __('Windows shared folder'); ?>">Shared Folder</a></li>
     </ul>
     <div id="tabs-1">
         <table cellpadding="0" cellspacing="0" class="fixed">

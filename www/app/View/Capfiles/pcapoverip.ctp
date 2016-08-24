@@ -13,7 +13,7 @@
 <?php else : ?>
 <div class="outcome">
 	<div class="outcome-bord">
-	<h2><?php echo __('Pcap file with PCAP-over-IP'); ?></h2><br/><br/>
+	<h2><?php echo __('PCAP file with PCAP-over-IP'); ?></h2><br/><br/>
 	<?php if ($capana) : ?>
 	<p><?php echo __('You can upload your pcap files on DataSet "<strong>'.$dataset_name.'</strong>" using this command:'); ?></p>
 	<br/><p><strong>cat your_file.pcap | nc <?php echo $ip.'  '.$port;?></strong></p><br/>

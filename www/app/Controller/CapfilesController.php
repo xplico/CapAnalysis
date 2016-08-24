@@ -218,6 +218,27 @@ class CapfilesController extends AppController {
         }
     }
 
+    function sharedfolder() {
+        if ($this->dataset_id == 0)
+            die();
+        
+        $this->layout = 'tab';
+        
+        $this->Dataset->recursive = -1;
+        $this->Dataset->id = $this->dataset_id;
+        $ds = $this->Dataset->read();
+        $fport = $this->Session->read('dspath').'/tmp/pcap_ip.port';
+        if (file_exists($fport)) {
+            $this->set('dataset_name', $ds['Dataset']['name']);
+            $this->set('shared_folder', '\\'.'\\'.$_SERVER['SERVER_ADDR'].'\capanalysis_'.$this->dataset_id);
+            $this->set('shared_folder_linux', 'smb://'.$_SERVER['SERVER_ADDR'].'/capanalysis_'.$this->dataset_id);
+            $this->set('capana', true);
+        }
+        else {
+            $this->set('capana', false);
+        }
+    }
+    
     function uploadurl() {
         if ($this->dataset_id == 0)
             die();
