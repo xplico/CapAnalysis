@@ -1,7 +1,7 @@
 /* dbinterface.c
  * 
  * By Gianluca Costa <g.costa@xplico.org>
- * Copyright 2012-16 Gianluca Costa. Web: www.capanalysis.net
+ * Copyright 2012-17 Gianluca Costa. Web: www.capanalysis.net
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -274,13 +274,10 @@ int DBIntDeep(int ds_id, ds_depth *deep)
 int DBIntDeleteDataSet(int ds_id)
 {
     char query[DBINT_QUERY_DIM];
+    unsigned long cnt;
     
-    switch (dbt) {        
-    default:
-        /* not return -1 */
-        break;
-    }
-    
+    LogPrintf(LV_INFO, "Delete DS number %i", ds_id);
+        
     /* query delete dataset and items table */
     sprintf(query, DBINT_QUERY_DROP_TABLE, DBINI_ITEMS_STR, ds_id);
     DBIntQuery(query, NULL);
@@ -291,6 +288,16 @@ int DBIntDeleteDataSet(int ds_id)
     sprintf(query, DBINT_QUERY_DELETE_DS, ds_id);
     if (DBIntQuery(query, NULL) != 0) {
         return -1;
+    }
+
+    if (DBIntDsNum(&cnt) == 0) {
+        /* check if it is empty */
+        if (cnt == 0) {
+            if (dbt == DB_POSTGRESQL) {
+                sprintf(query, DBINT_QUERY_DS_TRUNCATE);
+                DBIntQuery(query, NULL);
+            }
+        }
     }
     
     return 0;
@@ -375,6 +382,22 @@ int DBIntCheckDB(void)
     sprintf(query, DBINT_QUERY_CHECK);
     ret = DBIntQuery(query, &cnt);
     if (ret == 0 && cnt != 1) {
+        ret = -1;
+    }
+    
+    return ret;
+}
+
+
+int DBIntDsNum(unsigned long *cnt)
+{
+    int ret;
+    char query[DBINT_QUERY_DIM];
+    
+    /* query count datasets */
+    sprintf(query, DBINT_QUERY_DS_COUNT);
+    ret = DBIntQuery(query, cnt);
+    if (ret == -1) {
         //printf("Check DB: %i\n", cnt);
         ret = -1;
     }

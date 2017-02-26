@@ -29,6 +29,8 @@
 #define DBINT_QUERY_VERSION           "SELECT ver FROM versions ORDER BY cdate DESC LIMIT 1;"
 #define DBINT_QUERY_SET_VERSION       "INSERT INTO versions (ver) VALUES ('%s');"
 #define DBINT_QUERY_DS_DEPTH          "SELECT depth FROM datasets WHERE id='%d';"
+#define DBINT_QUERY_DS_COUNT          "SELECT COUNT(*) FROM datasets;"
+#define DBINT_QUERY_DS_TRUNCATE       "TRUNCATE TABLE datasets RESTART IDENTITY CASCADE;"
 
 /* postgresql */
 #define DBINT_1_QUERY_FILE            "INSERT INTO capfiles (dataset_id, data_size, filename, md5, sha1) VALUES (%i, %zu, '%s', '%s', '%s') RETURNING id;"
@@ -71,6 +73,7 @@ int DBIntInit(dbconf *conf);
 int DBIntCheckDB(void);
 int DBIntCheckVer(char *ver);
 int DBIntClose(void);
+int DBIntDsNum(unsigned long *cnt);
 int DBIntFilePcap(int ds_id, size_t size, const char *name, const char *md5, const char *sha1, unsigned long *id);
 int DBIntDeleteDataSet(int ds_id);
 int DBIntDeleteFile(int ds_id, int fl_id);
