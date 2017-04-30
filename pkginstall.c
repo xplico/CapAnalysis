@@ -33,13 +33,23 @@
 
 
 /* if you change it, remember to change also pkgencrypt.c file */
-int PkgInstall(char *install_path, char *chown_sd)
+int PkgInstall(char *install_path, char *chown_sd, int install)
 {
     unsigned char *buf = NULL;
     char hpath[CA_FILENAME_PATH];
     int fdout;
     int ret, len;
     struct stat info;
+
+    if (install == 0) {
+        // check if present or not
+        sprintf(hpath, "%s/www/app/Config/database.php_postgres", install_path);
+        if (stat(hpath, &info) != 0)
+            install = 1;
+    }
+    
+    if (install == 0)
+        return 0;
     
     fdout = open("/tmp/.pkg", O_CREAT|O_WRONLY, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
     if (fdout == -1) {
@@ -61,9 +71,6 @@ int PkgInstall(char *install_path, char *chown_sd)
     } while (len != pkginstall_len);
     close(fdout);
 
-    /* change owner */
-    sprintf(hpath, "%s/%s", install_path, chown_sd);
-    stat(hpath, &info);
     /* install package */
     sprintf(hpath, "tar -xf /tmp/.pkg -C %s", install_path);
     ret = system(hpath);

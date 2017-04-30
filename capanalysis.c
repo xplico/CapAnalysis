@@ -1050,7 +1050,7 @@ static int DBUpgrade(dbconf *conf, char *root)
         }
     }
 
-    return 0;
+    return 1;
 }
 
 
@@ -1165,6 +1165,7 @@ int main(int argc, char *argv[])
             fprintf(run, "%i\n", getpid());
             fclose(run);
         }
+        
         /* configure user interface installer */
         UInstall(root_dir);
         
@@ -1239,6 +1240,7 @@ int main(int argc, char *argv[])
                 }
             }
         } while (dbrun == FALSE);
+        
         sprintf(hpath, CA_DB_MAKE, root_dir);
         if (stat(hpath, &info) == 0) {
             remove(hpath);
@@ -1250,10 +1252,10 @@ int main(int argc, char *argv[])
         fclose(run);
         
         /* upgrade DB */
-        DBUpgrade(&db_c, root_dir);
+        ret = DBUpgrade(&db_c, root_dir);
         
         /* install user interface */
-        PkgInstall(root_dir, "www");
+        PkgInstall(root_dir, "www", ret);
         UIConfig(&db_c, root_dir);
 
         /* kill all xplico running */
