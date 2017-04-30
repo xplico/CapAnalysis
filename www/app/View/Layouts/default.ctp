@@ -105,7 +105,7 @@ http://www.evolka.it
 	</div>
 	
 	<div id="footer" class="container_12">
-	<p id="autor">CapAnalysis <?php echo $this->Session->read('vers'); ?>- <a href="http://www.capanalysis.net">http://www.capanalysis.net</a> - &copy; 2012-2016. All rights reserved.</p>
+	<p id="autor">CapAnalysis <?php echo $this->Session->read('vers'); ?>- <a href="http://www.capanalysis.net">http://www.capanalysis.net</a> - &copy; 2012-2017. All rights reserved.</p>
 	</div>
 	<?php echo $this->Session->flash(); ?>
 	<?php echo $this->element('sql_dump'); ?>
