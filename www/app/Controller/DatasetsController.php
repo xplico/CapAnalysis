@@ -90,9 +90,9 @@ class DatasetsController extends AppController {
       'conditions' => array('Dataset.group_id' => $this->group_id),
       'limit' => $this->paginate['limit']
     ));
-        if ($this->Session->check('demo')) {
-            $this->paginate['Dataset']['conditions']['Dataset.name'] = 'Set '.$this->Session->read('ip_usr');
-        }
+    if ($this->Session->check('demo')) {
+        $this->paginate['Dataset']['conditions']['Dataset.name'] = 'Set '.$this->Session->read('ip_usr');
+    }
 
     $this->Dataset->recursive = -1;
     $this->set('datasets', $this->paginate('Dataset'));

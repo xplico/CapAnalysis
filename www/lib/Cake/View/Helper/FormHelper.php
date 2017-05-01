@@ -504,7 +504,8 @@ class FormHelper extends AppHelper {
 		}
 		return $this->hidden('_Token.key', array(
 			'value' => $this->request->params['_Token']['key'], 'id' => 'Token' . mt_rand(),
-			'secure' => static::SECURE_SKIP
+			'secure' => static::SECURE_SKIP,
+			'autocomplete' => 'off',
 		));
 	}
 
@@ -614,12 +615,14 @@ class FormHelper extends AppHelper {
 			'value' => urlencode($fields . ':' . $locked),
 			'id' => 'TokenFields' . mt_rand(),
 			'secure' => static::SECURE_SKIP,
+			'autocomplete' => 'off',
 		));
 		$out = $this->hidden('_Token.fields', $tokenFields);
 		$tokenUnlocked = array_merge($secureAttributes, array(
 			'value' => urlencode($unlocked),
 			'id' => 'TokenUnlocked' . mt_rand(),
 			'secure' => static::SECURE_SKIP,
+			'autocomplete' => 'off',
 		));
 		$out .= $this->hidden('_Token.unlocked', $tokenUnlocked);
 		return $this->Html->useTag('hiddenblock', $out);
@@ -1068,7 +1071,7 @@ class FormHelper extends AppHelper {
 		if ($type !== 'hidden' && $error !== false) {
 			$errMsg = $this->error($fieldName, $error);
 			if ($errMsg) {
-				$divOptions = $this->addClass($divOptions, 'error');
+				$divOptions = $this->addClass($divOptions, Hash::get($divOptions, 'errorClass', 'error'));
 				if ($errorMessage) {
 					$out['error'] = $errMsg;
 				}
@@ -1088,7 +1091,7 @@ class FormHelper extends AppHelper {
 
 		if (!empty($divOptions['tag'])) {
 			$tag = $divOptions['tag'];
-			unset($divOptions['tag']);
+			unset($divOptions['tag'], $divOptions['errorClass']);
 			$output = $this->Html->tag($tag, $output, $divOptions);
 		}
 		return $output;
@@ -1319,6 +1322,8 @@ class FormHelper extends AppHelper {
 			is_scalar($fieldDef['length']) &&
 			$fieldDef['length'] < 1000000 &&
 			$fieldDef['type'] !== 'decimal' &&
+			$fieldDef['type'] !== 'time' &&
+			$fieldDef['type'] !== 'datetime' &&
 			$options['type'] !== 'select'
 		);
 		if ($autoLength &&
@@ -1940,6 +1945,7 @@ class FormHelper extends AppHelper {
  * - `before` - Content to include before the input.
  * - `after` - Content to include after the input.
  * - `type` - Set to 'reset' for reset inputs. Defaults to 'submit'
+ * - `confirm` - JavaScript confirmation message.
  * - Other attributes will be assigned to the input element.
  *
  * ### Options
@@ -1957,12 +1963,17 @@ class FormHelper extends AppHelper {
  * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#FormHelper::submit
  */
 	public function submit($caption = null, $options = array()) {
+		$confirmMessage = false;
 		if (!is_string($caption) && empty($caption)) {
 			$caption = __d('cake', 'Submit');
 		}
 		$out = null;
 		$div = true;
 
+		if (!empty($options['confirm'])) {
+			$confirmMessage = $options['confirm'];
+			unset($options['confirm']);
+		}
 		if (isset($options['div'])) {
 			$div = $options['div'];
 			unset($options['div']);
@@ -2003,6 +2014,12 @@ class FormHelper extends AppHelper {
 			foreach ($unlockFields as $ignore) {
 				$this->unlockField($ignore);
 			}
+		}
+
+		if ($confirmMessage) {
+			$okCode = 'return true;';
+			$cancelCode = 'event.returnValue = false; return false;';
+			$options['onclick'] = $this->_confirm($confirmMessage, $okCode, $cancelCode, $options);
 		}
 
 		if ($isUrl) {
@@ -2818,7 +2835,7 @@ class FormHelper extends AppHelper {
 					} else {
 						$select[] = $this->Html->useTag('optiongroupend');
 					}
-					$parents[] = $name;
+					$parents[] = (string)$name;
 				}
 				$select = array_merge($select, $this->_selectOptions(
 					$title, $parents, $showParents, $attributes
@@ -3093,7 +3110,7 @@ class FormHelper extends AppHelper {
  * @return void
  */
 	protected function _lastAction($url) {
-		$action = Router::url($url, true);
+		$action = html_entity_decode($this->url($url, true), ENT_QUOTES);
 		$query = parse_url($action, PHP_URL_QUERY);
 		$query = $query ? '?' . $query : '';
 		$this->_lastAction = parse_url($action, PHP_URL_PATH) . $query;

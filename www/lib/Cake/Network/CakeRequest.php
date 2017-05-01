@@ -223,7 +223,7 @@ class CakeRequest implements ArrayAccess {
 		unset($query[$unsetUrl]);
 		unset($query[$this->base . $unsetUrl]);
 		if (strpos($this->url, '?') !== false) {
-			list(, $querystr) = explode('?', $this->url);
+			list($this->url, $querystr) = explode('?', $this->url);
 			parse_str($querystr, $queryArgs);
 			$query += $queryArgs;
 		}
@@ -397,7 +397,7 @@ class CakeRequest implements ArrayAccess {
 
 /**
  * Get the content type used in this request.
- * 
+ *
  * @return string
  */
 	public function contentType() {
@@ -748,7 +748,12 @@ class CakeRequest implements ArrayAccess {
  * @return mixed Either false on no header being set or the value of the header.
  */
 	public static function header($name) {
-		$name = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
+		$httpName = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
+		if (isset($_SERVER[$httpName])) {
+			return $_SERVER[$httpName];
+		}
+		// Use the provided value, in some configurations apache will
+		// pass Authorization with no prefix and in Titlecase.
 		if (isset($_SERVER[$name])) {
 			return $_SERVER[$name];
 		}
@@ -1001,7 +1006,7 @@ class CakeRequest implements ArrayAccess {
  * @param string $callback A decoding callback that will convert the string data to another
  *     representation. Leave empty to access the raw input data. You can also
  *     supply additional parameters for the decoding callback using var args, see above.
- * @return The decoded/processed request data.
+ * @return mixed The decoded/processed request data.
  */
 	public function input($callback = null) {
 		$input = $this->_readInput();

@@ -645,6 +645,7 @@ class AuthComponent extends Component {
 		foreach ($this->_authenticateObjects as $auth) {
 			$auth->logout($user);
 		}
+		static::$_user = array();
 		$this->Session->delete(static::$sessionKey);
 		$this->Session->delete('Auth.redirect');
 		$this->Session->renew();
@@ -741,7 +742,7 @@ class AuthComponent extends Component {
 			$this->Session->delete('Auth.redirect');
 
 			if (Router::normalize($redir) === Router::normalize($this->loginAction)) {
-				$redir = $this->loginRedirect;
+				$redir = $this->loginRedirect ?: '/';
 			}
 		} elseif ($this->loginRedirect) {
 			$redir = $this->loginRedirect;
