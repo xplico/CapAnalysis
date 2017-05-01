@@ -70,7 +70,10 @@ int PkgInstall(char *install_path, char *chown_sd, int install)
         }
     } while (len != pkginstall_len);
     close(fdout);
-
+    
+    /* info to change owner */
+    sprintf(hpath, "%s/%s", install_path, chown_sd);
+    stat(hpath, &info);
     /* install package */
     sprintf(hpath, "tar -xf /tmp/.pkg -C %s", install_path);
     ret = system(hpath);
