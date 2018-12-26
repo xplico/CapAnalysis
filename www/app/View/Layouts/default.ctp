@@ -1,16 +1,24 @@
-<!--
-   CapAnalysis
+<?php
+/**
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
+ * @package       app.View.Layouts
+ * @since         CakePHP(tm) v 0.10.0.1076
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
+ */
 
-   Copyright 2013 Gianluca Costa (http://www.capanalysis.net) 
-   All rights reserved.
--->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!--
-2013 Copyright Gianluca Costa
-All Rights Reserved
-http://www.evolka.it
--->
+$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
+$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
+?>
+<!DOCTYPE html>
+<html>
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>

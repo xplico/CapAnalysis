@@ -1,17 +1,17 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Datasource.Database
  * @since         CakePHP(tm) v 0.9.1.114
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DboSource', 'Model/Datasource');
@@ -52,12 +52,15 @@ class Postgres extends DboSource {
  * Columns
  *
  * @var array
+ * @link https://www.postgresql.org/docs/9.6/static/datatype.html PostgreSQL Data Types
  */
 	public $columns = array(
 		'primary_key' => array('name' => 'serial NOT NULL'),
 		'string' => array('name' => 'varchar', 'limit' => '255'),
 		'text' => array('name' => 'text'),
 		'integer' => array('name' => 'integer', 'formatter' => 'intval'),
+		'smallinteger' => array('name' => 'smallint', 'formatter' => 'intval'),
+		'tinyinteger' => array('name' => 'smallint', 'formatter' => 'intval'),
 		'biginteger' => array('name' => 'bigint', 'limit' => '20'),
 		'float' => array('name' => 'float', 'formatter' => 'floatval'),
 		'decimal' => array('name' => 'decimal', 'formatter' => 'floatval'),
@@ -248,7 +251,7 @@ class Postgres extends DboSource {
 					'default' => preg_replace(
 						"/^'(.*)'$/",
 						"$1",
-						preg_replace('/::.*/', '', $c->default)
+						preg_replace('/::[\w\s]+/', '', $c->default)
 					),
 					'length' => $length,
 				);
@@ -721,6 +724,8 @@ class Postgres extends DboSource {
 				return 'time';
 			case ($col === 'bigint'):
 				return 'biginteger';
+			case ($col === 'smallint'):
+				return 'smallinteger';
 			case (strpos($col, 'int') !== false && $col !== 'interval'):
 				return 'integer';
 			case (strpos($col, 'char') !== false):
@@ -760,10 +765,10 @@ class Postgres extends DboSource {
 /**
  * resultSet method
  *
- * @param array &$results The results
+ * @param PDOStatement $results The results
  * @return void
  */
-	public function resultSet(&$results) {
+	public function resultSet($results) {
 		$this->map = array();
 		$numFields = $results->columnCount();
 		$index = 0;
