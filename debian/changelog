@@ -1,3 +1,10 @@
+capanalysis (1.2.3) stable; urgency=low
+  * improved DPI
+  * PHP framework upgraded
+  * Shared folder (using SAMBA)
+
+ -- Gianluca Costa (CapAnalysis) <support@capanalysis.net>  Wed, 26 Dec 2018 15:45:02 +0200
+
 capanalysis (1.2.2) stable; urgency=low
   * improved DPI
   * PHP framework upgraded
